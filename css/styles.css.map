@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/Users/nagaiyouta/work/Hugo/youtangai.github.io",
+	"sourceRoot": "/Users/nagaiyouta/work/Hugo/blog",
 	"sources": [
 		"themes/swift/assets/sass/main.sass",
 		"themes/swift/assets/sass/_variables.sass",
