@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>youtangai blog</title>
+    <title>youtangai&#39;s blog</title>
     <link>https://youtangai.github.io/</link>
-    <description>Recent content on youtangai blog</description>
+    <description>Recent content on youtangai&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
@@ -17,7 +17,15 @@
       <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>https://youtangai.github.io/about/</guid>
-      <description>自己紹介 こんにちは youtangaiです．</description>
+      <description>自己紹介 こんにちは、youtangaiです
+15歳から百合に目覚めて以来ずっと百合が好きで、主にコミック百合姫を追っかけています。大沢やよい先生の作品が大好きです。
+ゲームも好きでかなりやっています。最近ハマっているゲームはLoL(League of Legends)で、ハマりすぎて時間が無限にとけて困っています。IDはyoutangaiでやっています。
+Vtuberも好きなのですが、特にホロライブのライバーが好きで応援していて、大神ミオちゃんが一番の推しです。
+ブログ開設の動機 2019年にアドベントカレンダーを書く機会が増えたので、ブログを開設しました。
+普段からGoを利用しており、HUGOが気になっていたのでサイトのジェネレータとしてHUGOを採用しました。
+投稿内容 私のブログらしく、以下のカテゴリでブログを投稿しようと考えています。
+ 百合 Vtuber LoL Go言語  上記以外にも要望がある内容や、私の価値観や考え方なども投稿できたら良いなと思っています。
+よろしくお願いします。</description>
     </item>
     
   </channel>
