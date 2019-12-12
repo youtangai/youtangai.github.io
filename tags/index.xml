@@ -6,9 +6,19 @@
     <description>Recent content in Tags on youtangai&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://youtangai.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>other</title>
+      <link>https://youtangai.github.io/tags/other/</link>
+      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://youtangai.github.io/tags/other/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
