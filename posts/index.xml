@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>youtangai&#39;s blog</title>
-    <link>https://youtangai.github.io/</link>
-    <description>Recent content on youtangai&#39;s blog</description>
+    <title>Posts on youtangai&#39;s blog</title>
+    <link>https://youtangai.github.io/posts/</link>
+    <description>Recent content in Posts on youtangai&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 12 Dec 2019 18:27:00 +0900</lastBuildDate>
     
-	<atom:link href="https://youtangai.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://youtangai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -43,24 +43,6 @@
 最終的には2人は結ばれて、最後は甘い甘い2人の生活を見届けられるので、安心して読めます。
 こんな人におすすめ ということで、以下のような方におすすめです
  王道のJK百合が見たい！ すでに完結した作品がみたい！ 甘々な展開が見たい！  3. 加瀬さんシリーズ 加瀬さんシリーズは、ウィングスにて連載中の高嶋ひろみ先生の作品です。 俗称は加瀬さんシリーズなのですが、単行本はすべて &amp;ldquo;○○と加瀬さん&amp;rdquo; というタイトルで統一されているため、加瀬さんシリーズと呼ばれています。</description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://youtangai.github.io/about/</link>
-      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://youtangai.github.io/about/</guid>
-      <description>プロフィール 2019年12月12日現在の内容です
- 公立はこだて未来大学 修士2年 24歳 男性 サーバサイドエンジニア  趣味紹介 こんにちは、youtangaiです
-15歳から百合に目覚めて以来ずっと百合が好きで、主にコミック百合姫を追っかけています。大沢やよい先生の作品が大好きです。
-ゲームも好きでかなりやっています。最近ハマっているゲームはLoL(League of Legends)で、ハマりすぎて時間が無限にとけて困っています。IDはyoutangaiでやっています。
-Vtuberも好きなのですが、特にホロライブのライバーが好きで応援していて、大神ミオちゃんが一番の推しです。
-ブログ開設の動機 2019年にアドベントカレンダーを書く機会が増えたので、ブログを開設しました。
-普段からGo言語を利用しており、HUGOが気になっていたのでサイトのジェネレータとしてHUGOを採用しました。
-投稿内容 私のブログらしく、以下のカテゴリでブログを投稿しようと考えています。
- 百合 Vtuber LoL Go言語  上記以外にも要望がある内容や、私の価値観や考え方なども投稿できたら良いなと思っています。
-よろしくお願いします。</description>
     </item>
     
   </channel>

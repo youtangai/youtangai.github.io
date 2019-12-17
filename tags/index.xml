@@ -6,9 +6,28 @@
     <description>Recent content in Tags on youtangai&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
+    <lastBuildDate>Thu, 12 Dec 2019 18:27:00 +0900</lastBuildDate>
     
 	<atom:link href="https://youtangai.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>百合</title>
+      <link>https://youtangai.github.io/tags/%E7%99%BE%E5%90%88/</link>
+      <pubDate>Thu, 12 Dec 2019 18:27:00 +0900</pubDate>
+      
+      <guid>https://youtangai.github.io/tags/%E7%99%BE%E5%90%88/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>その他</title>
+      <link>https://youtangai.github.io/tags/%E3%81%9D%E3%81%AE%E4%BB%96/</link>
+      <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://youtangai.github.io/tags/%E3%81%9D%E3%81%AE%E4%BB%96/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
