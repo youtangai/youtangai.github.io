@@ -7,7 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Thu, 12 Dec 2019 18:27:00 +0900</lastBuildDate><atom:link href="https://youtangai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 26 Apr 2021 00:11:12 +0900</lastBuildDate>
+    
+	<atom:link href="https://youtangai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>ElastickBeanstalkの仕組みを調べた</title>
+      <link>https://youtangai.github.io/posts/elastic_beanstalk/</link>
+      <pubDate>Mon, 26 Apr 2021 00:11:12 +0900</pubDate>
+      
+      <guid>https://youtangai.github.io/posts/elastic_beanstalk/</guid>
+      <description>はじめに  この記事は、私が仕事で利用しているElastick BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります  入社してから1年近く利用しているのですが、特に深堀りすることもなく利用していたので、ちゃんと調べようと思った次第です   あまり突っ込んだところまでは調べてません AWSのどのリソースを利用して実現しているのかを調べています  Elastick Beanstalk(EB)とは  こちらがEBの公式ドキュメントです。日本語版も結構しっかりしているので、こちらを読むのが良いと思います。 私の認識でめっちゃ簡単に言うと、アプリケーションのプロビジョニング、ロードバランシング、スケーリング、モニタリングを自動的に行なってくれる環境を構築するサービスです  どうやって実現しているのか  いよいよ本題なのですが、こちらも公式のドキュメントを読むのが最も誤解なくて良いと思います。 ただ、この調子で公式ドキュメントのリンクを貼り付けていくだけでは私の頭に定着しないと思うので、自分の言葉で説明していきます  意図的に英語の公式ドキュメントを読むことで噛み砕くプロセスを追加しています(そんなことはどうでもいい)    構成要素  EB環境を構築すると、下記リソースが作られます  Elastic Load Balancer Route53のCNAMEレコード Auto Scaling Group EC2 Instance Security Group   それぞれについて詳細を深掘っていきます  Elastic Load Balancer &amp;amp; Route53  ロードバランサーがEB環境へのアクセスの入り口になります EB環境は、環境ごとにURLを持っています  例：{アプリケーション名}.{リージョン}.elasticbeanstalk.com このURLはロードバランサーへのエイリアスになっています  Route53にCNMAEレコードとして登録されています      Auto Sacling Group  上記ロードバランサの裏側にAuto Scaling Group(ASG)がいます このASGには1つ以上のEC2インスタンスが存在します  EB環境への負荷が高くなったら、ASGにインスタンスが追加される 逆に負荷が低くなれば、ASGからインスタンスが除かれる(ただし、常に少なくとも1つは存在する)    EC2 Instance  EC2インスタンス上にはHost Manager(HM)というコンポーネントが起動していて、このコンポーネントが下記のタスクを行っている  アプリケーションのデプロイ コンソールやAPI、コマンドラインでのイベントやメトリクスをアグリゲートする インスタンスレベルのイベントを生成する アプリケーションのログファイル監視 アプリケーションサーバの監視 Patching instance components(これよくわかりませんでした) アプリケーションログのローテーションをして、S3に保存する   デフォルトでポート80からのアクセスを許可するSecurity Groupが作成されていて、EBによって作成されたEC2はこのセキュリティグループに所属している  まとめると  EB環境へのリクエストはロードバランサでうける ロードバランサの裏にはASGがある ASGには常に1つ以上のEC2インスタンスが存在する EC2インスタンス上ではアプリケーションだけでなくHMが稼働しており、HMが色々やってる  終わりに  1年たってようやく調べたのですが、もっと早めに調べればよかったなと思ってます 今回はとっても簡単な調査程度で終わりますが、実際の環境で実験とかハマったこととか書いて行けるといいなと思っています(かける範囲で) 更新頑張るぞい  </description>
+    </item>
+    
     <item>
       <title>おすすめ百合作品紹介</title>
       <link>https://youtangai.github.io/posts/yuri_introduction/</link>

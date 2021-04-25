@@ -6,9 +6,109 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Thu, 12 Dec 2019 18:27:00 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://youtangai.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>ElastickBeanstalkの仕組みを調べた</title>
+        <link>https://youtangai.github.io/posts/elastic_beanstalk/</link>
+        <pubDate>Mon, 26 Apr 2021 00:11:12 +0900</pubDate>
+        
+        <guid>https://youtangai.github.io/posts/elastic_beanstalk/</guid>
+        <description>youtangai&#39;s blog https://youtangai.github.io/posts/elastic_beanstalk/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;この記事は、私が仕事で利用しているElastick BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります
+&lt;ul&gt;
+&lt;li&gt;入社してから1年近く利用しているのですが、特に深堀りすることもなく利用していたので、ちゃんと調べようと思った次第です&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;あまり突っ込んだところまでは調べてません&lt;/li&gt;
+&lt;li&gt;AWSのどのリソースを利用して実現しているのかを調べています&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;elastick-beanstalkebとは&#34;&gt;Elastick Beanstalk(EB)とは&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/Welcome.html&#34;&gt;こちら&lt;/a&gt;がEBの公式ドキュメントです。日本語版も結構しっかりしているので、こちらを読むのが良いと思います。&lt;/li&gt;
+&lt;li&gt;私の認識でめっちゃ簡単に言うと、アプリケーションのプロビジョニング、ロードバランシング、スケーリング、モニタリングを自動的に行なってくれる環境を構築するサービスです&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;どうやって実現しているのか&#34;&gt;どうやって実現しているのか&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;いよいよ本題なのですが、こちらも&lt;a href=&#34;https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts-webserver.html&#34;&gt;公式のドキュメント&lt;/a&gt;を読むのが最も誤解なくて良いと思います。&lt;/li&gt;
+&lt;li&gt;ただ、この調子で公式ドキュメントのリンクを貼り付けていくだけでは私の頭に定着しないと思うので、自分の言葉で説明していきます
+&lt;ul&gt;
+&lt;li&gt;意図的に英語の公式ドキュメントを読むことで噛み砕くプロセスを追加しています(そんなことはどうでもいい)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;構成要素&#34;&gt;構成要素&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;EB環境を構築すると、下記リソースが作られます
+&lt;ul&gt;
+&lt;li&gt;Elastic Load Balancer&lt;/li&gt;
+&lt;li&gt;Route53のCNAMEレコード&lt;/li&gt;
+&lt;li&gt;Auto Scaling Group&lt;/li&gt;
+&lt;li&gt;EC2 Instance&lt;/li&gt;
+&lt;li&gt;Security Group&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;それぞれについて詳細を深掘っていきます&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;elastic-load-balancer--route53&#34;&gt;Elastic Load Balancer &amp;amp; Route53&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;ロードバランサーがEB環境へのアクセスの入り口になります&lt;/li&gt;
+&lt;li&gt;EB環境は、環境ごとにURLを持っています
+&lt;ul&gt;
+&lt;li&gt;例：{アプリケーション名}.{リージョン}.elasticbeanstalk.com&lt;/li&gt;
+&lt;li&gt;このURLはロードバランサーへのエイリアスになっています
+&lt;ul&gt;
+&lt;li&gt;Route53にCNMAEレコードとして登録されています&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;auto-sacling-group&#34;&gt;Auto Sacling Group&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;上記ロードバランサの裏側にAuto Scaling Group(ASG)がいます&lt;/li&gt;
+&lt;li&gt;このASGには1つ以上のEC2インスタンスが存在します
+&lt;ul&gt;
+&lt;li&gt;EB環境への負荷が高くなったら、ASGにインスタンスが追加される&lt;/li&gt;
+&lt;li&gt;逆に負荷が低くなれば、ASGからインスタンスが除かれる(ただし、常に少なくとも1つは存在する)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;ec2-instance&#34;&gt;EC2 Instance&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;EC2インスタンス上にはHost Manager(HM)というコンポーネントが起動していて、このコンポーネントが下記のタスクを行っている
+&lt;ul&gt;
+&lt;li&gt;アプリケーションのデプロイ&lt;/li&gt;
+&lt;li&gt;コンソールやAPI、コマンドラインでのイベントやメトリクスをアグリゲートする&lt;/li&gt;
+&lt;li&gt;インスタンスレベルのイベントを生成する&lt;/li&gt;
+&lt;li&gt;アプリケーションのログファイル監視&lt;/li&gt;
+&lt;li&gt;アプリケーションサーバの監視&lt;/li&gt;
+&lt;li&gt;Patching instance components(これよくわかりませんでした)&lt;/li&gt;
+&lt;li&gt;アプリケーションログのローテーションをして、S3に保存する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;デフォルトでポート80からのアクセスを許可するSecurity Groupが作成されていて、EBによって作成されたEC2はこのセキュリティグループに所属している&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;まとめると&#34;&gt;まとめると&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;EB環境へのリクエストはロードバランサでうける&lt;/li&gt;
+&lt;li&gt;ロードバランサの裏にはASGがある&lt;/li&gt;
+&lt;li&gt;ASGには常に1つ以上のEC2インスタンスが存在する&lt;/li&gt;
+&lt;li&gt;EC2インスタンス上ではアプリケーションだけでなくHMが稼働しており、HMが色々やってる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;終わりに&#34;&gt;終わりに&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;1年たってようやく調べたのですが、もっと早めに調べればよかったなと思ってます&lt;/li&gt;
+&lt;li&gt;今回はとっても簡単な調査程度で終わりますが、実際の環境で実験とかハマったこととか書いて行けるといいなと思っています(かける範囲で)&lt;/li&gt;
+&lt;li&gt;更新頑張るぞい&lt;/li&gt;
+&lt;/ul&gt;
+- https://youtangai.github.io/posts/elastic_beanstalk/ - Copyright © 2019–2021, youtangai; all rights reserved.</description>
+        </item>
     
     
     
