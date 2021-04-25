@@ -13,14 +13,14 @@
     
     
         <item>
-        <title>ElastickBeanstalkの仕組みを調べた</title>
+        <title>ElasticBeanstalkの仕組みを調べた</title>
         <link>https://youtangai.github.io/posts/elastic_beanstalk/</link>
         <pubDate>Mon, 26 Apr 2021 00:11:12 +0900</pubDate>
         
         <guid>https://youtangai.github.io/posts/elastic_beanstalk/</guid>
         <description>youtangai&#39;s blog https://youtangai.github.io/posts/elastic_beanstalk/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
 &lt;ul&gt;
-&lt;li&gt;この記事は、私が仕事で利用しているElastick BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります
+&lt;li&gt;この記事は、私が仕事で利用しているElastic BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります
 &lt;ul&gt;
 &lt;li&gt;入社してから1年近く利用しているのですが、特に深堀りすることもなく利用していたので、ちゃんと調べようと思った次第です&lt;/li&gt;
 &lt;/ul&gt;
@@ -28,7 +28,7 @@
 &lt;li&gt;あまり突っ込んだところまでは調べてません&lt;/li&gt;
 &lt;li&gt;AWSのどのリソースを利用して実現しているのかを調べています&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h1 id=&#34;elastick-beanstalkebとは&#34;&gt;Elastick Beanstalk(EB)とは&lt;/h1&gt;
+&lt;h1 id=&#34;elastic-beanstalkebとは&#34;&gt;Elastic Beanstalk(EB)とは&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/Welcome.html&#34;&gt;こちら&lt;/a&gt;がEBの公式ドキュメントです。日本語版も結構しっかりしているので、こちらを読むのが良いと思います。&lt;/li&gt;
 &lt;li&gt;私の認識でめっちゃ簡単に言うと、アプリケーションのプロビジョニング、ロードバランシング、スケーリング、モニタリングを自動的に行なってくれる環境を構築するサービスです&lt;/li&gt;

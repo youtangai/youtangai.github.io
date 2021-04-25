@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>ElastickBeanstalkの仕組みを調べた</title>
+<title>ElasticBeanstalkの仕組みを調べた</title>
 
 
 
@@ -10,14 +10,14 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="ElastickBeanstalkがどのような技術で実現されているのか調べて見ました">
+<meta name="description" content="ElasticBeanstalkがどのような技術で実現されているのか調べて見ました">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="ElastickBeanstalkの仕組みを調べた" />
-<meta property="og:description" content="ElastickBeanstalkがどのような技術で実現されているのか調べて見ました" />
+<meta property="og:title" content="ElasticBeanstalkの仕組みを調べた" />
+<meta property="og:description" content="ElasticBeanstalkがどのような技術で実現されているのか調べて見ました" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://youtangai.github.io/posts/elastic_beanstalk/" />
 <meta property="article:published_time" content="2021-04-26T00:11:12+09:00" />
@@ -28,8 +28,8 @@
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="ElastickBeanstalkの仕組みを調べた"/>
-<meta name="twitter:description" content="ElastickBeanstalkがどのような技術で実現されているのか調べて見ました"/>
+<meta name="twitter:title" content="ElasticBeanstalkの仕組みを調べた"/>
+<meta name="twitter:description" content="ElasticBeanstalkがどのような技術で実現されているのか調べて見ました"/>
 
 
 
@@ -216,8 +216,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#elastick-beanstalkeb%e3%81%a8%e3%81%af" onclick="onNavClick(`#elastick-beanstalkebとは-nav`)" id="elastick-beanstalkebとは-nav">
-									Elastick Beanstalk(EB)とは
+								<a href="#elastic-beanstalkeb%e3%81%a8%e3%81%af" onclick="onNavClick(`#elastic-beanstalkebとは-nav`)" id="elastic-beanstalkebとは-nav">
+									Elastic Beanstalk(EB)とは
 								</a>
 							</li>
 						
@@ -481,8 +481,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#elastick-beanstalkeb%e3%81%a8%e3%81%af" onclick="onNavClick(`#elastick-beanstalkebとは-nav`)" id="elastick-beanstalkebとは-nav">
-									Elastick Beanstalk(EB)とは
+								<a href="#elastic-beanstalkeb%e3%81%a8%e3%81%af" onclick="onNavClick(`#elastic-beanstalkebとは-nav`)" id="elastic-beanstalkebとは-nav">
+									Elastic Beanstalk(EB)とは
 								</a>
 							</li>
 						
@@ -689,10 +689,10 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             >
                 <div class="post-title">
-                    ElastickBeanstalkの仕組みを調べた
+                    ElasticBeanstalkの仕組みを調べた
                     
                     <div class="post-subtitle">
-                        ElastickBeanstalkがどのような技術で実現されているのか調べて見ました
+                        ElasticBeanstalkがどのような技術で実現されているのか調べて見ました
                     </div>
                     
                     <div class="post-meta">
@@ -714,7 +714,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                                 <a href="/tags/aws">AWS</a>
                                 &nbsp;
                             
-                                <a href="/tags/elastickbeanstalk">ElastickBeanstalk</a>
+                                <a href="/tags/elasticbeanstalk">ElasticBeanstalk</a>
                                 &nbsp;
                             
                         
@@ -729,7 +729,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                     <h1 id="はじめに">はじめに</h1>
 <ul>
-<li>この記事は、私が仕事で利用しているElastick BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります
+<li>この記事は、私が仕事で利用しているElastic BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります
 <ul>
 <li>入社してから1年近く利用しているのですが、特に深堀りすることもなく利用していたので、ちゃんと調べようと思った次第です</li>
 </ul>
@@ -737,7 +737,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 <li>あまり突っ込んだところまでは調べてません</li>
 <li>AWSのどのリソースを利用して実現しているのかを調べています</li>
 </ul>
-<h1 id="elastick-beanstalkebとは">Elastick Beanstalk(EB)とは</h1>
+<h1 id="elastic-beanstalkebとは">Elastic Beanstalk(EB)とは</h1>
 <ul>
 <li><a href="https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/Welcome.html">こちら</a>がEBの公式ドキュメントです。日本語版も結構しっかりしているので、こちらを読むのが良いと思います。</li>
 <li>私の認識でめっちゃ簡単に言うと、アプリケーションのプロビジョニング、ロードバランシング、スケーリング、モニタリングを自動的に行なってくれる環境を構築するサービスです</li>
