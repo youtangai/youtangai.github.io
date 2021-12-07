@@ -2,28 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://youtangai.github.io/tags/aws/</loc>
-    <lastmod>2021-05-11T22:24:44+09:00</lastmod>
+    <loc>https://youtangai.github.io/tags/akka-stream/</loc>
+    <lastmod>2021-12-07T21:19:00+09:00</lastmod>
+  </url><url>
+    <loc>https://youtangai.github.io/posts/akka_stream/</loc>
+    <lastmod>2021-12-07T21:19:00+09:00</lastmod>
   </url><url>
     <loc>https://youtangai.github.io/categories/</loc>
+    <lastmod>2021-12-07T21:19:00+09:00</lastmod>
+  </url><url>
+    <loc>https://youtangai.github.io/posts/</loc>
+    <lastmod>2021-12-07T21:19:00+09:00</lastmod>
+  </url><url>
+    <loc>https://youtangai.github.io/tags/</loc>
+    <lastmod>2021-12-07T21:19:00+09:00</lastmod>
+  </url><url>
+    <loc>https://youtangai.github.io/categories/tech/</loc>
+    <lastmod>2021-12-07T21:19:00+09:00</lastmod>
+  </url><url>
+    <loc>https://youtangai.github.io/</loc>
+    <lastmod>2021-12-07T21:19:00+09:00</lastmod>
+  </url><url>
+    <loc>https://youtangai.github.io/tags/aws/</loc>
     <lastmod>2021-05-11T22:24:44+09:00</lastmod>
   </url><url>
     <loc>https://youtangai.github.io/tags/eks/</loc>
     <lastmod>2021-05-11T22:24:44+09:00</lastmod>
   </url><url>
     <loc>https://youtangai.github.io/posts/eks_1_16/</loc>
-    <lastmod>2021-05-11T22:24:44+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/posts/</loc>
-    <lastmod>2021-05-11T22:24:44+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/tags/</loc>
-    <lastmod>2021-05-11T22:24:44+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/categories/tech/</loc>
-    <lastmod>2021-05-11T22:24:44+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/</loc>
     <lastmod>2021-05-11T22:24:44+09:00</lastmod>
   </url><url>
     <loc>https://youtangai.github.io/tags/elasticbeanstalk/</loc>

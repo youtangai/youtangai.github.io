@@ -6,9 +6,68 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Tue, 11 May 2021 22:24:44 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 07 Dec 2021 21:19:00 +0900</lastBuildDate>
     
         <atom:link href="https://youtangai.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Akka Streamsについて調べてみたよ</title>
+        <link>https://youtangai.github.io/posts/akka_stream/</link>
+        <pubDate>Tue, 07 Dec 2021 21:19:00 +0900</pubDate>
+        
+        <guid>https://youtangai.github.io/posts/akka_stream/</guid>
+        <description>youtangai&#39;s blog https://youtangai.github.io/posts/akka_stream/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+&lt;p&gt;皆さんこんにちは、最近パーソナルトレーニングを始めたyoutangaiです。
+ダイエットと運動不足解消を目的に始めたのですが、適切なフォームでトレーニングできてとても満足度が高いです。&lt;/p&gt;
+&lt;p&gt;さて、今回の記事は、メディア事業部の広告横軸組織PTA(&lt;a href=&#34;https://twitter.com/PTA_CyberAgent&#34;&gt;twitter&lt;/a&gt;)の&lt;a href=&#34;https://adventar.org/calendars/6450&#34;&gt;アドベントカレンダー&lt;/a&gt;8日目の記事となります。よろしくお願い致します。&lt;/p&gt;
+&lt;p&gt;先に述べますと今回の内容はAkka Streamsの基礎的な概念を調査した内容になります。そのため、対象の読者は私と同じで&lt;code&gt;Akka Streamsなんもわからん&lt;/code&gt;という方々です。&lt;/p&gt;
+&lt;h1 id=&#34;動機&#34;&gt;動機&lt;/h1&gt;
+&lt;p&gt;Amebaの広告システムは稼働してから7,8年くらい(正確じゃないかもです)経過しており、古くから稼働しているシステムが結構あります。
+その中でも、RDBに保存されているレコードをインメモリデータストアに保存するシステムが、ブラックボックスになってしまっています。
+我々の広告配信システムにおいてかなり重要なシステムで、ここで障害が発生すると大損害が発生する可能性があります。
+このままではまずいということで、このシステムについて調査することになりました。
+しかし、このシステムはScalaのAkka Streamsで実装されており、ソースコードを読んでいてもすんなり理解できる内容ではありませんでした。
+そこで、基礎的な部分からしっかり理解しようと思ったのが動機です。&lt;/p&gt;
+&lt;h1 id=&#34;akka-streamsとは&#34;&gt;Akka Streamsとは&lt;/h1&gt;
+&lt;p&gt;ここからが、本題です。&lt;br&gt;
+Akka Streamsとは、&lt;a href=&#34;https://www.reactive-streams.org/&#34;&gt;Reactive Streams&lt;/a&gt;のAkka実装です。
+そのため、Akka Streamsを理解するためにはReactive Streamsを理解する必要があります。&lt;/p&gt;
+&lt;h2 id=&#34;reactive-streams&#34;&gt;Reactive Streams&lt;/h2&gt;
+&lt;p&gt;Reactive Streamsのドキュメントではこのように記述されています。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;直訳すると、Reactive Streamsとは&lt;code&gt;ノンブロッキング&lt;/code&gt;な&lt;code&gt;バックプレッシャー&lt;/code&gt;を備えた&lt;code&gt;非同期ストリーム処理の標準&lt;/code&gt;です。
+ノンブロッキングや非同期ストリーム処理はなんとなく想像がつくのですが、バックプレッシャーという単語は初耳でした。&lt;/p&gt;
+&lt;h2 id=&#34;バックプレッシャー&#34;&gt;バックプレッシャー&lt;/h2&gt;
+&lt;p&gt;Reactive Streamsでは、データを流す&lt;code&gt;パブリッシャー&lt;/code&gt;と、流れてきたデータを受け取る&lt;code&gt;サブスクライバー&lt;/code&gt;が登場します。&lt;/p&gt;
+&lt;p&gt;バックプレッシャーがない場合、パブリッシャーが流すデータの量がサブスクライバーの処理能力を上回ると、サブスクライバーの処理が間に合わず、データが詰まってしまいます。&lt;/p&gt;
+&lt;p&gt;このような問題を回避するためにバックプレッシャーがあります。サブスクライバーは、自身が処理できるデータ量を定義し、自身が処理できる分だけパブリッシャーからデータを受け取ります。パブリッシャー側で流量制限を行う必要がないため、効率よくデータを処理することが可能になります。&lt;/p&gt;
+&lt;h1 id=&#34;抽象概念について&#34;&gt;抽象概念について&lt;/h1&gt;
+&lt;p&gt;さて、これまでReactive Streamsについて述べてきましたが、ここからはAkka Streamsにおける概念について述べます。
+Akka Streamsには&lt;code&gt;Source&lt;/code&gt;、&lt;code&gt;Sink&lt;/code&gt;、&lt;code&gt;Flow&lt;/code&gt;、&lt;code&gt;Graph&lt;/code&gt;という4つの重要な抽象化された概念があります。先に簡単に述べてしまうと、Sourceでデータを作成し、Flowで流れてきたデータを加工し、Sinkで最終的に加工されたデータを受け取るという流れになっています。これらの流れ全体をGraphと呼びます。&lt;/p&gt;
+&lt;h2 id=&#34;source&#34;&gt;Source&lt;/h2&gt;
+&lt;p&gt;データを生成する場所、つまりパブリッシャーです。ここで、ファイルの中身を読み出したり、HTTPリクエストボディの中身を読み出したり、データストアからデータを読み出したりする。&lt;/p&gt;
+&lt;h2 id=&#34;sink&#34;&gt;Sink&lt;/h2&gt;
+&lt;p&gt;最終的にデータを受け取る場所、つまりサブスクライバーです。ここで、受け取ったデータをファイルに書き出したり、データストアに書き込んだりするはず。実際にファイル書き出ししている例は見つけたが、データストアに書き込んだりする例を見つけられなかったので想像の話をしています。例があったら教えて下さい。&lt;/p&gt;
+&lt;h2 id=&#34;flow&#34;&gt;Flow&lt;/h2&gt;
+&lt;p&gt;データを処理する場所です。Flowだけは特殊で、サブスクライバーでありパブリッシャーです。Sourceからデータを受け取ったり、FlowからFlowへデータが流れたり、FlowからSinkにデータを流したりします。
+ここでは、流れてきたデータのデコード処理だったり、想定しないデータのフィルタリングなどを行います。&lt;/p&gt;
+&lt;h2 id=&#34;graph&#34;&gt;Graph&lt;/h2&gt;
+&lt;p&gt;Sourceに始まり、0以上のFlowを経由して、Sinkに終わる一連の流れがGraphです。
+このGraphを定義し実行することで、処理されたデータを得ることができます。&lt;/p&gt;
+&lt;h1 id=&#34;おわりに&#34;&gt;おわりに&lt;/h1&gt;
+&lt;p&gt;今回調べた結果、ソースコードを読んでいてわからないと思っていた部分が理解できたので、今後のシステム調査はスムーズに進んでくれるといいなと思っています。
+引き続きシステムの調査は行うので、改めて調査が必要な内容が出てきたら再度まとめたいと考えています。&lt;/p&gt;
+&lt;p&gt;最後まで読んでいただきありがとうございました。&lt;/p&gt;
+&lt;h1 id=&#34;参考文献&#34;&gt;参考文献&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&amp;ldquo;Reactive Streams&amp;rdquo;. &lt;a href=&#34;https://www.reactive-streams.org/&#34;&gt;https://www.reactive-streams.org/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Xiao Yang. &amp;ldquo;Akka Streamsについての基礎概念&amp;rdquo;. Qiita. 2018/02/01. &lt;a href=&#34;https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a&#34;&gt;https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a&lt;/a&gt;, (Accessed: 2021/12/07)&lt;/li&gt;
+&lt;li&gt;前出祐吾. &amp;ldquo;Akka Streamsで実装するリアクティブストリーム&amp;rdquo;._ Think IT. 2018/03/07. &lt;a href=&#34;https://thinkit.co.jp/article/13485&#34;&gt;https://thinkit.co.jp/article/13485&lt;/a&gt;, (Accessed: 2021/12/07)&lt;/li&gt;
+&lt;/ul&gt;
+- https://youtangai.github.io/posts/akka_stream/ - Copyright © 2019–2021, youtangai; all rights reserved.</description>
+        </item>
     
     
     
