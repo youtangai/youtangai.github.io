@@ -6,9 +6,111 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 11 May 2021 22:24:44 +0900</lastBuildDate>
     
         <atom:link href="https://youtangai.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>EKSを1.16にバージョンアップするの大変だった</title>
+        <link>https://youtangai.github.io/posts/eks_1_16/</link>
+        <pubDate>Tue, 11 May 2021 22:24:44 +0900</pubDate>
+        
+        <guid>https://youtangai.github.io/posts/eks_1_16/</guid>
+        <description>youtangai&#39;s blog https://youtangai.github.io/posts/eks_1_16/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;この記事は、私が仕事でEKS(Elastic Kubernetes Service)のバージョンアップを行った際に、とても苦労したので備忘録も兼ねてやったこと・ハマったことをまとめた記事になります&lt;/li&gt;
+&lt;li&gt;私達のチームで運用しているEKSのバージョンが1.15だったのですが、&lt;a href=&#34;https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/kubernetes-versions.html#kubernetes-release-calendar&#34;&gt;EKSのリリースカレンダー&lt;/a&gt;をみると5月3日でサポートが終了してしまうという状況でした
+&lt;ul&gt;
+&lt;li&gt;これに気づいたのが4月20日頃で、猶予が2週間しかないので大慌てで更新作業を行いました&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;やるべきこと&#34;&gt;やるべきこと&lt;/h1&gt;
+&lt;h2 id=&#34;apiバージョンの変更&#34;&gt;APIバージョンの変更&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/kubernetes/kubernetes/blob/release-1.16/CHANGELOG/CHANGELOG-1.16.md#deprecations-and-removals&#34;&gt;1.16の変更点&lt;/a&gt;として影響が大きかったのは一部のAPIバージョンが非対応になったことです&lt;/li&gt;
+&lt;li&gt;例えば、DaemonSetsとDeploymentsとReplicaSetsにおいて、&lt;code&gt;extensions/v1beta1&lt;/code&gt;ではなく&lt;code&gt;apps/v1&lt;/code&gt;を利用することが推奨になりました&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;変更対象のアプリケーション&#34;&gt;変更対象のアプリケーション&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;私達のクラスタ上には、実際に非推奨のAPIバージョンで稼働しているDaemonSets・Deploymentsが存在していたので、それらのAPIバージョンを更新する必要がありました&lt;/li&gt;
+&lt;li&gt;対象となるアプリケーションは下記です(一部抜粋)
+&lt;ul&gt;
+&lt;li&gt;datadog&lt;/li&gt;
+&lt;li&gt;cluster-autoscaler&lt;/li&gt;
+&lt;li&gt;kiam&lt;/li&gt;
+&lt;li&gt;external-dns&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;作業内容&#34;&gt;作業内容&lt;/h1&gt;
+&lt;p&gt;作業内容は大きく以下の２つです。それぞれについて詳しく記述します。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;アプリケーションのAPIバージョン変更&lt;/li&gt;
+&lt;li&gt;ノードのバージョン変更&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;アプリケーションのapiバージョン変更&#34;&gt;アプリケーションのAPIバージョン変更&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;基本的にアプリケーションはhelmfileで管理していたので、helmfileの変更作業の内容を記述します&lt;/li&gt;
+&lt;li&gt;ちなみにhelmのバージョンは2系です&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;datadog&#34;&gt;datadog&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;大まか作業内容
+&lt;ul&gt;
+&lt;li&gt;datadogはhelmの&lt;code&gt;stable/datadog&lt;/code&gt;というチャートで管理しています&lt;/li&gt;
+&lt;li&gt;もともとデプロイされていたバージョンは&lt;code&gt;1.30.8&lt;/code&gt;でしたが、これを&lt;code&gt;1.35.1&lt;/code&gt;に上げました&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ハマったポイント
+&lt;ul&gt;
+&lt;li&gt;Podのイメージタグが変更されない
+&lt;ul&gt;
+&lt;li&gt;症状：チャートのバージョンを変更したにも関わらず、起動しているPodのイメージのタグが変更されませんでした&lt;/li&gt;
+&lt;li&gt;原因：jmx用のイメージを利用するためvaluesで直接タグが指定されていることに気づかなかったことです(valuesの中身をしっかりみるべきでした)&lt;/li&gt;
+&lt;li&gt;対応：valuesでイメージのタグを&lt;code&gt;6.13.0-jmx&lt;/code&gt;に変更&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;cluster-autoscaler&#34;&gt;cluster-autoscaler&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;大まか作業内容
+&lt;ul&gt;
+&lt;li&gt;cluster-autoscalerはhelmの&lt;code&gt;stable/cluster-autoscaler&lt;/code&gt;というチャートで管理しています&lt;/li&gt;
+&lt;li&gt;もともとデプロイされていたバージョンは&lt;code&gt;0.12.4&lt;/code&gt;でしたが、これを&lt;code&gt;7.0.0&lt;/code&gt;に上げました&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ハマったポイント
+&lt;ol&gt;
+&lt;li&gt;autoDiscovery機能が働かない
+&lt;ul&gt;
+&lt;li&gt;症状：cluster-autoscalerが起動するも、AutoDiscovery機能によってAutoScalingGroupを発見したというログが流れない&lt;/li&gt;
+&lt;li&gt;原因：chartのバージョンが大きく上がったことでvaluesに新しく&lt;code&gt;tags&lt;/code&gt;という項目が追加されており、そこのデフォルトの値が期待するものと異なっていた&lt;/li&gt;
+&lt;li&gt;対応：下記内容を追加した&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;autoDiscovery:
+    clusterName: {クラスタの名前}
+    tags:
+        - k8s.io/cluster-autoscaler/enabled
+        - kubernetes.io/cluster/{クラスタの名前}
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;1. スケールアウトしない
+   - 症状：PendingになっているPodがあるにも関わらず新しいNodeが起動しない
+   - 原因：valuesで、cluster-autoscalerイメージのタグに`1.16.0`を指定していたのですが`1.16.0`に[バグ](https://github.com/kubernetes/autoscaler/issues/2345)があった
+   - 対応：イメージのタグを`1.16.1`に変更した
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;おわりに&#34;&gt;おわりに&lt;/h1&gt;
+&lt;p&gt;力尽きてしまったので今日はここまで。
+kiam、external-dns、ノードのバージョン変更についてはまた別の機会に&amp;hellip;&lt;/p&gt;
+- https://youtangai.github.io/posts/eks_1_16/ - Copyright © 2019–2021, youtangai; all rights reserved.</description>
+        </item>
     
     
     

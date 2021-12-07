@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>EKS on youtangai&#39;s blog</title>
+    <link>https://youtangai.github.io/tags/eks/</link>
+    <description>Recent content in EKS on youtangai&#39;s blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
+    <lastBuildDate>Tue, 11 May 2021 22:24:44 +0900</lastBuildDate><atom:link href="https://youtangai.github.io/tags/eks/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>EKSを1.16にバージョンアップするの大変だった</title>
+      <link>https://youtangai.github.io/posts/eks_1_16/</link>
+      <pubDate>Tue, 11 May 2021 22:24:44 +0900</pubDate>
+      
+      <guid>https://youtangai.github.io/posts/eks_1_16/</guid>
+      <description>はじめに  この記事は、私が仕事でEKS(Elastic Kubernetes Service)のバージョンアップを行った際に、とても苦労したので備忘録も兼ねてやったこと・ハマったことをまとめた記事になります 私達のチームで運用しているEKSのバージョンが1.15だったのですが、EKSのリリースカレンダーをみると5月3日でサポートが終了してしまうという状況でした  これに気づいたのが4月20日頃で、猶予が2週間しかないので大慌てで更新作業を行いました    やるべきこと APIバージョンの変更  1.16の変更点として影響が大きかったのは一部のAPIバージョンが非対応になったことです 例えば、DaemonSetsとDeploymentsとReplicaSetsにおいて、extensions/v1beta1ではなくapps/v1を利用することが推奨になりました  変更対象のアプリケーション  私達のクラスタ上には、実際に非推奨のAPIバージョンで稼働しているDaemonSets・Deploymentsが存在していたので、それらのAPIバージョンを更新する必要がありました 対象となるアプリケーションは下記です(一部抜粋)  datadog cluster-autoscaler kiam external-dns    作業内容 作業内容は大きく以下の２つです。それぞれについて詳しく記述します。
+ アプリケーションのAPIバージョン変更 ノードのバージョン変更  アプリケーションのAPIバージョン変更  基本的にアプリケーションはhelmfileで管理していたので、helmfileの変更作業の内容を記述します ちなみにhelmのバージョンは2系です  datadog  大まか作業内容  datadogはhelmのstable/datadogというチャートで管理しています もともとデプロイされていたバージョンは1.30.8でしたが、これを1.35.1に上げました   ハマったポイント  Podのイメージタグが変更されない  症状：チャートのバージョンを変更したにも関わらず、起動しているPodのイメージのタグが変更されませんでした 原因：jmx用のイメージを利用するためvaluesで直接タグが指定されていることに気づかなかったことです(valuesの中身をしっかりみるべきでした) 対応：valuesでイメージのタグを6.13.0-jmxに変更      cluster-autoscaler  大まか作業内容  cluster-autoscalerはhelmのstable/cluster-autoscalerというチャートで管理しています もともとデプロイされていたバージョンは0.12.4でしたが、これを7.0.0に上げました   ハマったポイント  autoDiscovery機能が働かない  症状：cluster-autoscalerが起動するも、AutoDiscovery機能によってAutoScalingGroupを発見したというログが流れない 原因：chartのバージョンが大きく上がったことでvaluesに新しくtagsという項目が追加されており、そこのデフォルトの値が期待するものと異なっていた 対応：下記内容を追加した      autoDiscovery: clusterName: {クラスタの名前} tags: - k8s.</description>
+    </item>
+    
+  </channel>
+</rss>

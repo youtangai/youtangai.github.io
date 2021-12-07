@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html><head>
-<title>ElasticBeanstalkの仕組みを調べた</title>
+<title>EKSを1.16にバージョンアップするの大変だった</title>
 
 
 
@@ -10,18 +10,18 @@
 <meta name="google-site-verification" content="">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <meta content="telephone=no" name="format-detection">
-<meta name="description" content="ElasticBeanstalkがどのような技術で実現されているのか調べて見ました">
+<meta name="description" content="EKSを1.16にバージョンアップする際に詰まったことと解決方法をまとめます">
 <meta name="renderer" content="webkit">
 <meta name="theme-color" content="#ffffff">
 
 
 
-<meta property="og:title" content="ElasticBeanstalkの仕組みを調べた" />
-<meta property="og:description" content="ElasticBeanstalkがどのような技術で実現されているのか調べて見ました" />
+<meta property="og:title" content="EKSを1.16にバージョンアップするの大変だった" />
+<meta property="og:description" content="EKSを1.16にバージョンアップする際に詰まったことと解決方法をまとめます" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://youtangai.github.io/posts/elastic_beanstalk/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-04-26T00:11:12+09:00" />
-<meta property="article:modified_time" content="2021-04-26T00:11:12+09:00" /><meta property="og:site_name" content="youtangaiのブログ" />
+<meta property="og:url" content="https://youtangai.github.io/posts/eks_1_16/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-11T22:24:44+09:00" />
+<meta property="article:modified_time" content="2021-05-11T22:24:44+09:00" /><meta property="og:site_name" content="youtangaiのブログ" />
 
 
 
@@ -29,8 +29,8 @@
 
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="ElasticBeanstalkの仕組みを調べた"/>
-<meta name="twitter:description" content="ElasticBeanstalkがどのような技術で実現されているのか調べて見ました"/>
+<meta name="twitter:title" content="EKSを1.16にバージョンアップするの大変だった"/>
+<meta name="twitter:description" content="EKSを1.16にバージョンアップする際に詰まったことと解決方法をまとめます"/>
 
 
 
@@ -216,26 +216,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#elastic-beanstalkeb%e3%81%a8%e3%81%af" onclick="onNavClick(`#elastic-beanstalkebとは-nav`)" id="elastic-beanstalkebとは-nav">
-									Elastic Beanstalk(EB)とは
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e3%81%a9%e3%81%86%e3%82%84%e3%81%a3%e3%81%a6%e5%ae%9f%e7%8f%be%e3%81%97%e3%81%a6%e3%81%84%e3%82%8b%e3%81%ae%e3%81%8b" onclick="onNavClick(`#どうやって実現しているのか-nav`)" id="どうやって実現しているのか-nav">
-									どうやって実現しているのか
+								<a href="#%e3%82%84%e3%82%8b%e3%81%b9%e3%81%8d%e3%81%93%e3%81%a8" onclick="onNavClick(`#やるべきこと-nav`)" id="やるべきこと-nav">
+									やるべきこと
 								</a>
 							</li>
 						
@@ -256,8 +238,48 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e6%a7%8b%e6%88%90%e8%a6%81%e7%b4%a0" onclick="onNavClick(`#構成要素-nav`)" id="構成要素-nav">
-									構成要素
+								<a href="#api%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e3%81%ae%e5%a4%89%e6%9b%b4" onclick="onNavClick(`#apiバージョンの変更-nav`)" id="apiバージョンの変更-nav">
+									APIバージョンの変更
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%89%e6%9b%b4%e5%af%be%e8%b1%a1%e3%81%ae%e3%82%a2%e3%83%97%e3%83%aa%e3%82%b1%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3" onclick="onNavClick(`#変更対象のアプリケーション-nav`)" id="変更対象のアプリケーション-nav">
+									変更対象のアプリケーション
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%9c%e6%a5%ad%e5%86%85%e5%ae%b9" onclick="onNavClick(`#作業内容-nav`)" id="作業内容-nav">
+									作業内容
 								</a>
 							</li>
 						
@@ -278,8 +300,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#elastic-load-balancer--route53" onclick="onNavClick(`#elastic-load-balancer--route53-nav`)" id="elastic-load-balancer--route53-nav">
-									Elastic Load Balancer &amp; Route53
+								<a href="#%e3%82%a2%e3%83%97%e3%83%aa%e3%82%b1%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3%e3%81%aeapi%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e5%a4%89%e6%9b%b4" onclick="onNavClick(`#アプリケーションのapiバージョン変更-nav`)" id="アプリケーションのapiバージョン変更-nav">
+									アプリケーションのAPIバージョン変更
 								</a>
 							</li>
 						
@@ -291,53 +313,35 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 				
 					
 						
-						
-						
-						
-						
-							<li>
-								<a href="#auto-sacling-group" onclick="onNavClick(`#auto-sacling-group-nav`)" id="auto-sacling-group-nav">
-									Auto Sacling Group
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#ec2-instance" onclick="onNavClick(`#ec2-instance-nav`)" id="ec2-instance-nav">
-									EC2 Instance
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
 						
 						
 						
 							
-								</ul>
+								<ul class="collapse" data-toggle="collapse">
 							
+						
+						
+							<li>
+								<a href="#datadog" onclick="onNavClick(`#datadog-nav`)" id="datadog-nav">
+									datadog
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
 						
 						
 						
 							<li>
-								<a href="#%e3%81%be%e3%81%a8%e3%82%81%e3%82%8b%e3%81%a8" onclick="onNavClick(`#まとめると-nav`)" id="まとめると-nav">
-									まとめると
+								<a href="#cluster-autoscaler" onclick="onNavClick(`#cluster-autoscaler-nav`)" id="cluster-autoscaler-nav">
+									cluster-autoscaler
 								</a>
 							</li>
 						
@@ -354,12 +358,14 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 							
 								</ul>
 							
+								</ul>
+							
 						
 						
 						
 							<li>
-								<a href="#%e7%b5%82%e3%82%8f%e3%82%8a%e3%81%ab" onclick="onNavClick(`#終わりに-nav`)" id="終わりに-nav">
-									終わりに
+								<a href="#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab" onclick="onNavClick(`#おわりに-nav`)" id="おわりに-nav">
+									おわりに
 								</a>
 							</li>
 						
@@ -481,26 +487,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#elastic-beanstalkeb%e3%81%a8%e3%81%af" onclick="onNavClick(`#elastic-beanstalkebとは-nav`)" id="elastic-beanstalkebとは-nav">
-									Elastic Beanstalk(EB)とは
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e3%81%a9%e3%81%86%e3%82%84%e3%81%a3%e3%81%a6%e5%ae%9f%e7%8f%be%e3%81%97%e3%81%a6%e3%81%84%e3%82%8b%e3%81%ae%e3%81%8b" onclick="onNavClick(`#どうやって実現しているのか-nav`)" id="どうやって実現しているのか-nav">
-									どうやって実現しているのか
+								<a href="#%e3%82%84%e3%82%8b%e3%81%b9%e3%81%8d%e3%81%93%e3%81%a8" onclick="onNavClick(`#やるべきこと-nav`)" id="やるべきこと-nav">
+									やるべきこと
 								</a>
 							</li>
 						
@@ -521,8 +509,48 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#%e6%a7%8b%e6%88%90%e8%a6%81%e7%b4%a0" onclick="onNavClick(`#構成要素-nav`)" id="構成要素-nav">
-									構成要素
+								<a href="#api%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e3%81%ae%e5%a4%89%e6%9b%b4" onclick="onNavClick(`#apiバージョンの変更-nav`)" id="apiバージョンの変更-nav">
+									APIバージョンの変更
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%89%e6%9b%b4%e5%af%be%e8%b1%a1%e3%81%ae%e3%82%a2%e3%83%97%e3%83%aa%e3%82%b1%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3" onclick="onNavClick(`#変更対象のアプリケーション-nav`)" id="変更対象のアプリケーション-nav">
+									変更対象のアプリケーション
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%9c%e6%a5%ad%e5%86%85%e5%ae%b9" onclick="onNavClick(`#作業内容-nav`)" id="作業内容-nav">
+									作業内容
 								</a>
 							</li>
 						
@@ -543,8 +571,8 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 						
 						
 							<li>
-								<a href="#elastic-load-balancer--route53" onclick="onNavClick(`#elastic-load-balancer--route53-nav`)" id="elastic-load-balancer--route53-nav">
-									Elastic Load Balancer &amp; Route53
+								<a href="#%e3%82%a2%e3%83%97%e3%83%aa%e3%82%b1%e3%83%bc%e3%82%b7%e3%83%a7%e3%83%b3%e3%81%aeapi%e3%83%90%e3%83%bc%e3%82%b8%e3%83%a7%e3%83%b3%e5%a4%89%e6%9b%b4" onclick="onNavClick(`#アプリケーションのapiバージョン変更-nav`)" id="アプリケーションのapiバージョン変更-nav">
+									アプリケーションのAPIバージョン変更
 								</a>
 							</li>
 						
@@ -556,53 +584,35 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 				
 					
 						
-						
-						
-						
-						
-							<li>
-								<a href="#auto-sacling-group" onclick="onNavClick(`#auto-sacling-group-nav`)" id="auto-sacling-group-nav">
-									Auto Sacling Group
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#ec2-instance" onclick="onNavClick(`#ec2-instance-nav`)" id="ec2-instance-nav">
-									EC2 Instance
-								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
 						
 						
 						
 							
-								</ul>
+								<ul class="collapse" data-toggle="collapse">
 							
+						
+						
+							<li>
+								<a href="#datadog" onclick="onNavClick(`#datadog-nav`)" id="datadog-nav">
+									datadog
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
 						
 						
 						
 							<li>
-								<a href="#%e3%81%be%e3%81%a8%e3%82%81%e3%82%8b%e3%81%a8" onclick="onNavClick(`#まとめると-nav`)" id="まとめると-nav">
-									まとめると
+								<a href="#cluster-autoscaler" onclick="onNavClick(`#cluster-autoscaler-nav`)" id="cluster-autoscaler-nav">
+									cluster-autoscaler
 								</a>
 							</li>
 						
@@ -619,12 +629,14 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
 							
 								</ul>
 							
+								</ul>
+							
 						
 						
 						
 							<li>
-								<a href="#%e7%b5%82%e3%82%8f%e3%82%8a%e3%81%ab" onclick="onNavClick(`#終わりに-nav`)" id="終わりに-nav">
-									終わりに
+								<a href="#%e3%81%8a%e3%82%8f%e3%82%8a%e3%81%ab" onclick="onNavClick(`#おわりに-nav`)" id="おわりに-nav">
+									おわりに
 								</a>
 							</li>
 						
@@ -689,16 +701,16 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
             >
                 <div class="post-title">
-                    ElasticBeanstalkの仕組みを調べた
+                    EKSを1.16にバージョンアップするの大変だった
                     
                     <div class="post-subtitle">
-                        ElasticBeanstalkがどのような技術で実現されているのか調べて見ました
+                        EKSを1.16にバージョンアップする際に詰まったことと解決方法をまとめます
                     </div>
                     
                     <div class="post-meta">
                         
                         <time itemprop="datePublished">
-                            2021-04-26 00:11
+                            2021-05-11 22:24
                         </time>
                         
 
@@ -714,7 +726,7 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                                 <a href="/tags/aws">AWS</a>
                                 &nbsp;
                             
-                                <a href="/tags/elasticbeanstalk">ElasticBeanstalk</a>
+                                <a href="/tags/eks">EKS</a>
                                 &nbsp;
                             
                         
@@ -729,97 +741,99 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
                 
                     <h1 id="はじめに">はじめに</h1>
 <ul>
-<li>この記事は、私が仕事で利用しているElastic BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります
+<li>この記事は、私が仕事でEKS(Elastic Kubernetes Service)のバージョンアップを行った際に、とても苦労したので備忘録も兼ねてやったこと・ハマったことをまとめた記事になります</li>
+<li>私達のチームで運用しているEKSのバージョンが1.15だったのですが、<a href="https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/kubernetes-versions.html#kubernetes-release-calendar">EKSのリリースカレンダー</a>をみると5月3日でサポートが終了してしまうという状況でした
 <ul>
-<li>入社してから1年近く利用しているのですが、特に深堀りすることもなく利用していたので、ちゃんと調べようと思った次第です</li>
-</ul>
-</li>
-<li>あまり突っ込んだところまでは調べてません</li>
-<li>AWSのどのリソースを利用して実現しているのかを調べています</li>
-</ul>
-<h1 id="elastic-beanstalkebとは">Elastic Beanstalk(EB)とは</h1>
-<ul>
-<li><a href="https://docs.aws.amazon.com/ja_jp/elasticbeanstalk/latest/dg/Welcome.html">こちら</a>がEBの公式ドキュメントです。日本語版も結構しっかりしているので、こちらを読むのが良いと思います。</li>
-<li>私の認識でめっちゃ簡単に言うと、アプリケーションのプロビジョニング、ロードバランシング、スケーリング、モニタリングを自動的に行なってくれる環境を構築するサービスです</li>
-</ul>
-<h1 id="どうやって実現しているのか">どうやって実現しているのか</h1>
-<ul>
-<li>いよいよ本題なのですが、こちらも<a href="https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/concepts-webserver.html">公式のドキュメント</a>を読むのが最も誤解なくて良いと思います。</li>
-<li>ただ、この調子で公式ドキュメントのリンクを貼り付けていくだけでは私の頭に定着しないと思うので、自分の言葉で説明していきます
-<ul>
-<li>意図的に英語の公式ドキュメントを読むことで噛み砕くプロセスを追加しています(そんなことはどうでもいい)</li>
+<li>これに気づいたのが4月20日頃で、猶予が2週間しかないので大慌てで更新作業を行いました</li>
 </ul>
 </li>
 </ul>
-<h2 id="構成要素">構成要素</h2>
+<h1 id="やるべきこと">やるべきこと</h1>
+<h2 id="apiバージョンの変更">APIバージョンの変更</h2>
 <ul>
-<li>EB環境を構築すると、下記リソースが作られます
-<ul>
-<li>Elastic Load Balancer</li>
-<li>Route53のCNAMEレコード</li>
-<li>Auto Scaling Group</li>
-<li>EC2 Instance</li>
-<li>Security Group</li>
+<li><a href="https://github.com/kubernetes/kubernetes/blob/release-1.16/CHANGELOG/CHANGELOG-1.16.md#deprecations-and-removals">1.16の変更点</a>として影響が大きかったのは一部のAPIバージョンが非対応になったことです</li>
+<li>例えば、DaemonSetsとDeploymentsとReplicaSetsにおいて、<code>extensions/v1beta1</code>ではなく<code>apps/v1</code>を利用することが推奨になりました</li>
 </ul>
-</li>
-<li>それぞれについて詳細を深掘っていきます</li>
-</ul>
-<h3 id="elastic-load-balancer--route53">Elastic Load Balancer &amp; Route53</h3>
+<h2 id="変更対象のアプリケーション">変更対象のアプリケーション</h2>
 <ul>
-<li>ロードバランサーがEB環境へのアクセスの入り口になります</li>
-<li>EB環境は、環境ごとにURLを持っています
+<li>私達のクラスタ上には、実際に非推奨のAPIバージョンで稼働しているDaemonSets・Deploymentsが存在していたので、それらのAPIバージョンを更新する必要がありました</li>
+<li>対象となるアプリケーションは下記です(一部抜粋)
 <ul>
-<li>例：{アプリケーション名}.{リージョン}.elasticbeanstalk.com</li>
-<li>このURLはロードバランサーへのエイリアスになっています
-<ul>
-<li>Route53にCNMAEレコードとして登録されています</li>
+<li>datadog</li>
+<li>cluster-autoscaler</li>
+<li>kiam</li>
+<li>external-dns</li>
 </ul>
 </li>
 </ul>
-</li>
+<h1 id="作業内容">作業内容</h1>
+<p>作業内容は大きく以下の２つです。それぞれについて詳しく記述します。</p>
+<ul>
+<li>アプリケーションのAPIバージョン変更</li>
+<li>ノードのバージョン変更</li>
 </ul>
-<h3 id="auto-sacling-group">Auto Sacling Group</h3>
+<h2 id="アプリケーションのapiバージョン変更">アプリケーションのAPIバージョン変更</h2>
 <ul>
-<li>上記ロードバランサの裏側にAuto Scaling Group(ASG)がいます</li>
-<li>このASGには1つ以上のEC2インスタンスが存在します
-<ul>
-<li>EB環境への負荷が高くなったら、ASGにインスタンスが追加される</li>
-<li>逆に負荷が低くなれば、ASGからインスタンスが除かれる(ただし、常に少なくとも1つは存在する)</li>
+<li>基本的にアプリケーションはhelmfileで管理していたので、helmfileの変更作業の内容を記述します</li>
+<li>ちなみにhelmのバージョンは2系です</li>
 </ul>
-</li>
-</ul>
-<h3 id="ec2-instance">EC2 Instance</h3>
+<h3 id="datadog">datadog</h3>
 <ul>
-<li>EC2インスタンス上にはHost Manager(HM)というコンポーネントが起動していて、このコンポーネントが下記のタスクを行っている
+<li>大まか作業内容
 <ul>
-<li>アプリケーションのデプロイ</li>
-<li>コンソールやAPI、コマンドラインでのイベントやメトリクスをアグリゲートする</li>
-<li>インスタンスレベルのイベントを生成する</li>
-<li>アプリケーションのログファイル監視</li>
-<li>アプリケーションサーバの監視</li>
-<li>Patching instance components(これよくわかりませんでした)</li>
-<li>アプリケーションログのローテーションをして、S3に保存する</li>
+<li>datadogはhelmの<code>stable/datadog</code>というチャートで管理しています</li>
+<li>もともとデプロイされていたバージョンは<code>1.30.8</code>でしたが、これを<code>1.35.1</code>に上げました</li>
 </ul>
 </li>
-<li>デフォルトでポート80からのアクセスを許可するSecurity Groupが作成されていて、EBによって作成されたEC2はこのセキュリティグループに所属している</li>
-</ul>
-<h2 id="まとめると">まとめると</h2>
+<li>ハマったポイント
 <ul>
-<li>EB環境へのリクエストはロードバランサでうける</li>
-<li>ロードバランサの裏にはASGがある</li>
-<li>ASGには常に1つ以上のEC2インスタンスが存在する</li>
-<li>EC2インスタンス上ではアプリケーションだけでなくHMが稼働しており、HMが色々やってる</li>
-</ul>
-<h1 id="終わりに">終わりに</h1>
+<li>Podのイメージタグが変更されない
 <ul>
-<li>1年たってようやく調べたのですが、もっと早めに調べればよかったなと思ってます</li>
-<li>今回はとっても簡単な調査程度で終わりますが、実際の環境で実験とかハマったこととか書いて行けるといいなと思っています(かける範囲で)</li>
-<li>更新頑張るぞい</li>
+<li>症状：チャートのバージョンを変更したにも関わらず、起動しているPodのイメージのタグが変更されませんでした</li>
+<li>原因：jmx用のイメージを利用するためvaluesで直接タグが指定されていることに気づかなかったことです(valuesの中身をしっかりみるべきでした)</li>
+<li>対応：valuesでイメージのタグを<code>6.13.0-jmx</code>に変更</li>
 </ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="cluster-autoscaler">cluster-autoscaler</h3>
+<ul>
+<li>大まか作業内容
+<ul>
+<li>cluster-autoscalerはhelmの<code>stable/cluster-autoscaler</code>というチャートで管理しています</li>
+<li>もともとデプロイされていたバージョンは<code>0.12.4</code>でしたが、これを<code>7.0.0</code>に上げました</li>
+</ul>
+</li>
+<li>ハマったポイント
+<ol>
+<li>autoDiscovery機能が働かない
+<ul>
+<li>症状：cluster-autoscalerが起動するも、AutoDiscovery機能によってAutoScalingGroupを発見したというログが流れない</li>
+<li>原因：chartのバージョンが大きく上がったことでvaluesに新しく<code>tags</code>という項目が追加されており、そこのデフォルトの値が期待するものと異なっていた</li>
+<li>対応：下記内容を追加した</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<pre tabindex="0"><code>autoDiscovery:
+    clusterName: {クラスタの名前}
+    tags:
+        - k8s.io/cluster-autoscaler/enabled
+        - kubernetes.io/cluster/{クラスタの名前}
+</code></pre><pre><code>1. スケールアウトしない
+   - 症状：PendingになっているPodがあるにも関わらず新しいNodeが起動しない
+   - 原因：valuesで、cluster-autoscalerイメージのタグに`1.16.0`を指定していたのですが`1.16.0`に[バグ](https://github.com/kubernetes/autoscaler/issues/2345)があった
+   - 対応：イメージのタグを`1.16.1`に変更した
+</code></pre>
+<h1 id="おわりに">おわりに</h1>
+<p>力尽きてしまったので今日はここまで。
+kiam、external-dns、ノードのバージョン変更についてはまた別の機会に&hellip;</p>
 
                     
                     <HR width="100%" id="EOF">
-		    <p style="color:#777;">Last modified on 2021-04-26</p>
+		    <p style="color:#777;">Last modified on 2021-05-11</p>
                     
                 </div>
             </div>
@@ -828,14 +842,14 @@ Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopene
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://youtangai.github.io/posts/eks_1_16/">
-			Next<br>EKSを1.16にバージョンアップするの大変だった
+                <a class="newer-posts">
+			Next<br>No newer posts.
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://youtangai.github.io/posts/yuri_introduction/">
-			Previous<br>おすすめ百合作品紹介
+                <a class="older-posts" href="https://youtangai.github.io/posts/elastic_beanstalk/">
+			Previous<br>ElasticBeanstalkの仕組みを調べた
                 </a>
                 
             </nav>
