@@ -1,8 +1,8 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>youtangai&#39;s blog</title>
+    <title>youtangaiのブログ</title>
     <link>https://youtangai.github.io/</link>
-    <description>Recent content on youtangai&#39;s blog</description>
+    <description>Recent content on youtangaiのブログ</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
@@ -18,7 +18,7 @@
         <pubDate>Tue, 07 Dec 2021 21:19:00 +0900</pubDate>
         
         <guid>https://youtangai.github.io/posts/akka_stream/</guid>
-        <description>youtangai&#39;s blog https://youtangai.github.io/posts/akka_stream/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+        <description>youtangaiのブログ https://youtangai.github.io/posts/akka_stream/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
 &lt;p&gt;皆さんこんにちは、最近パーソナルトレーニングを始めたyoutangaiです。
 ダイエットと運動不足解消を目的に始めたのですが、適切なフォームでトレーニングできてとても満足度が高いです。&lt;/p&gt;
 &lt;p&gt;さて、今回の記事は、メディア事業部の広告横軸組織PTA(&lt;a href=&#34;https://twitter.com/PTA_CyberAgent&#34;&gt;twitter&lt;/a&gt;)の&lt;a href=&#34;https://adventar.org/calendars/6450&#34;&gt;アドベントカレンダー&lt;/a&gt;8日目の記事となります。よろしくお願い致します。&lt;/p&gt;
@@ -77,7 +77,7 @@ Akka Streamsには&lt;code&gt;Source&lt;/code&gt;、&lt;code&gt;Sink&lt;/code&gt
         <pubDate>Tue, 11 May 2021 22:24:44 +0900</pubDate>
         
         <guid>https://youtangai.github.io/posts/eks_1_16/</guid>
-        <description>youtangai&#39;s blog https://youtangai.github.io/posts/eks_1_16/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+        <description>youtangaiのブログ https://youtangai.github.io/posts/eks_1_16/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;この記事は、私が仕事でEKS(Elastic Kubernetes Service)のバージョンアップを行った際に、とても苦労したので備忘録も兼ねてやったこと・ハマったことをまとめた記事になります&lt;/li&gt;
 &lt;li&gt;私達のチームで運用しているEKSのバージョンが1.15だったのですが、&lt;a href=&#34;https://docs.aws.amazon.com/ja_jp/eks/latest/userguide/kubernetes-versions.html#kubernetes-release-calendar&#34;&gt;EKSのリリースカレンダー&lt;/a&gt;をみると5月3日でサポートが終了してしまうという状況でした
@@ -179,7 +179,7 @@ kiam、external-dns、ノードのバージョン変更についてはまた別�
         <pubDate>Mon, 26 Apr 2021 00:11:12 +0900</pubDate>
         
         <guid>https://youtangai.github.io/posts/elastic_beanstalk/</guid>
-        <description>youtangai&#39;s blog https://youtangai.github.io/posts/elastic_beanstalk/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+        <description>youtangaiのブログ https://youtangai.github.io/posts/elastic_beanstalk/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;この記事は、私が仕事で利用しているElastic BeanstalkがAWS上のどのような技術で構成されているのか知りたくて調べた結果をまとめた記事になります
 &lt;ul&gt;
@@ -279,7 +279,7 @@ kiam、external-dns、ノードのバージョン変更についてはまた別�
         <pubDate>Thu, 12 Dec 2019 18:27:00 +0900</pubDate>
         
         <guid>https://youtangai.github.io/posts/yuri_introduction/</guid>
-        <description>youtangai&#39;s blog https://youtangai.github.io/posts/yuri_introduction/ -&lt;h3 id=&#34;はじめに&#34;&gt;はじめに&lt;/h3&gt;
+        <description>youtangaiのブログ https://youtangai.github.io/posts/yuri_introduction/ -&lt;h3 id=&#34;はじめに&#34;&gt;はじめに&lt;/h3&gt;
 &lt;p&gt;この投稿は&lt;a href=&#34;https://adventar.org/calendars/4179&#34;&gt;FUN Advent Calendar 2019 part2&lt;/a&gt;の2日目の投稿です&lt;/p&gt;
 &lt;p&gt;しかし、私は2日を過ぎてから「空いてるのでやりませんか？」と誘ってもらってから書いたので投稿は12月18日となっています&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;許してください&lt;/strong&gt;&lt;/p&gt;
@@ -408,7 +408,7 @@ kiam、external-dns、ノードのバージョン変更についてはまた別�
         <pubDate>Tue, 10 Dec 2019 00:00:00 +0000</pubDate>
         
         <guid>https://youtangai.github.io/about/</guid>
-        <description>youtangai&#39;s blog https://youtangai.github.io/about/ -&lt;h1 id=&#34;プロフィール&#34;&gt;プロフィール&lt;/h1&gt;
+        <description>youtangaiのブログ https://youtangai.github.io/about/ -&lt;h1 id=&#34;プロフィール&#34;&gt;プロフィール&lt;/h1&gt;
 &lt;p&gt;2019年12月12日現在の内容です&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;公立はこだて未来大学 修士2年&lt;/li&gt;
@@ -445,7 +445,7 @@ kiam、external-dns、ノードのバージョン変更についてはまた別�
         <pubDate>Thu, 13 Dec 2018 00:27:32 +0900</pubDate>
         
         <guid>https://youtangai.github.io/posts/communication/</guid>
-        <description>youtangai&#39;s blog https://youtangai.github.io/posts/communication/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+        <description>youtangaiのブログ https://youtangai.github.io/posts/communication/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
 &lt;p&gt;はじめまして，よーちゃんです&lt;br&gt;
 初ブログなので，何を書こうかとても迷いました．
 悩んだ結果，あえて情報技術には全く触れずに&lt;code&gt;コミュニケーション技術&lt;/code&gt;について書こうと思いました．&lt;/p&gt;
