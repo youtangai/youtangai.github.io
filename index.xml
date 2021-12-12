@@ -6,9 +6,68 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Tue, 07 Dec 2021 21:19:00 +0900</lastBuildDate>
+    <lastBuildDate>Sun, 12 Dec 2021 12:35:48 +0900</lastBuildDate>
     
         <atom:link href="https://youtangai.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>オレシカナイト16の配信構成</title>
+        <link>https://youtangai.github.io/posts/oreshika_16/</link>
+        <pubDate>Sun, 12 Dec 2021 12:35:48 +0900</pubDate>
+        
+        <guid>https://youtangai.github.io/posts/oreshika_16/</guid>
+        <description>youtangaiのブログ https://youtangai.github.io/posts/oreshika_16/ -&lt;h1 id=&#34;はじめに&#34;&gt;はじめに&lt;/h1&gt;
+&lt;p&gt;皆さんこんにちは、なんとかジム通いを続けられているyoutangaiです。最近トレーニングにメニューにスクワットが追加されてめちゃめちゃきついですが、そのきつさに気持ちよさを感じ始めてきました。&lt;/p&gt;
+&lt;p&gt;この記事は、サイバーエージェントメディア事業部の広告横軸組織PTA(&lt;a href=&#34;https://twitter.com/PTA_CyberAgent&#34;&gt;twitter&lt;/a&gt;)の&lt;a href=&#34;https://adventar.org/calendars/6450&#34;&gt;アドベントカレンダー&lt;/a&gt;12日目の記事となります。よろしくお願い致します。&lt;/p&gt;
+&lt;h1 id=&#34;オレシカナイト&#34;&gt;オレシカナイト&lt;/h1&gt;
+&lt;p&gt;PTAではだいたい3ヶ月に1回のペースで、アドテク勉強会「オレシカナイト」を実施しております。コロナ前まではオフラインで実施していたのですが、2020年7月に開催したVol13からYoutube上でオンライン配信する形式に変更しました。それから4回オンラインで勉強会を実施し、Vol16では様々な工夫ができるほど経験が溜まってきました。今回の記事では、Vol16配信の構成と工夫について述べます。ちなみに、オレシカナイトVol16のアーカイブは&lt;a href=&#34;https://youtube.com/playlist?list=PLBsO-IAhmMUUw5_3PTQ7L0kfcnzhogpR_&#34;&gt;こちら&lt;/a&gt;にあるので、ぜひご覧ください。&lt;/p&gt;
+&lt;h1 id=&#34;配信画面&#34;&gt;配信画面&lt;/h1&gt;
+&lt;p&gt;結論から述べると、配信画面は下図のようになっています。発表者(右側の人)と司会者(左側の人)が対話しているような画面になっております(オレンジ色の枠です)。また、発表者のスライドが画面の中央に配置されており、視聴者や司会者からの質問に対する回答のスライドを表示することができます(赤色の枠です)。
+&lt;img src=&#34;https://youtangai.github.io/images/oreshika_16/stream_screen_struct.png&#34; alt=&#34;画面構成&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;機材構成&#34;&gt;機材構成&lt;/h1&gt;
+&lt;p&gt;配信は&lt;a href=&#34;https://obsproject.com/ja&#34;&gt;OBS&lt;/a&gt;という配信のアプリケーションで行っております。OBSに取り込む入力は以下のリストになります。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;映像
+&lt;ul&gt;
+&lt;li&gt;司会者の映像&lt;/li&gt;
+&lt;li&gt;発表者の映像&lt;/li&gt;
+&lt;li&gt;発表者のスライドの映像&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;音声
+&lt;ul&gt;
+&lt;li&gt;司会者&amp;amp;発表者のマイクの音声&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;これらのデータをOBSに取り込むための構成は下図の様になっております。
+&lt;img src=&#34;https://youtangai.github.io/images/oreshika_16/stream_structure.jpg&#34; alt=&#34;配信構成&#34;&gt;
+まず、マイクの音声と発表者スライドの取り込みについてです。これらのデータは会社から貸し出されている&lt;code&gt;Roland VR-4HD&lt;/code&gt;にて取り込みます。マイクの音声は、赤白のオーディオケーブルからRolandに取り込みます。発表者のスライドはHDMIケーブルでRolandに取り込みます。Rolandからの情報はOBSに映像と音声が別々に取り込まれます。&lt;/p&gt;
+&lt;p&gt;続いて、司会者と発表者の映像取り込みについてです。これらのデータはRolandから取り込むことも可能だったのですが、Roland側でスライドと合成された形でしか取り込めません。スライドと司会者&amp;amp;発表者の映像はOBS上で切り離して取り込みたかったので、&lt;code&gt;MiraBox VideoCapture&lt;/code&gt;を用意しそこから取り込みました。余談ですが、2つのVideoCaptureは私物を利用しております。&lt;/p&gt;
+&lt;h1 id=&#34;obs&#34;&gt;OBS&lt;/h1&gt;
+&lt;p&gt;ここからは取り込んだ情報(映像と音声)の加工についてです。OBSでは取り込んだ映像と音声にフィルタをかけて配信にのせることが可能です。&lt;/p&gt;
+&lt;h2 id=&#34;音声&#34;&gt;音声&lt;/h2&gt;
+&lt;p&gt;音声の加工は大きく下記2つです。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;音量の増幅&lt;/li&gt;
+&lt;li&gt;ノイズの低減&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;配信のテスト時にOBSに取り込んだ音声を確認すると、他の一般的なYouTube上の動画に比べて音量が小さいことがわかりました。そこで、OBS上のフィルタ&lt;code&gt;ゲイン&lt;/code&gt;を作成し&lt;code&gt;27.4dB&lt;/code&gt;を設定しました。これで、入力される音声を増幅して配信にのせることができました。
+&lt;img src=&#34;https://youtangai.github.io/images/oreshika_16/filter_gain.png&#34; alt=&#34;ゲインフィルタ&#34;&gt;&lt;/p&gt;
+&lt;p&gt;しかし、その場合マイクから入ったノイズも増幅されてしまいます。これを回避するために、&lt;code&gt;ノイズ抑制&lt;/code&gt;フィルタを作成し&lt;code&gt;RNNoise(高品質、より多くのCPU使用率)&lt;/code&gt;を設定しました。
+&lt;img src=&#34;https://youtangai.github.io/images/oreshika_16/filter_noise.png&#34; alt=&#34;ノイズ抑制フィルタ&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;映像&#34;&gt;映像&lt;/h2&gt;
+&lt;p&gt;司会者&amp;amp;発表者の後ろにはグリーンバックが設置してあります。そのため、人物の周りは緑色になって映像として取り込まれます。そこで&lt;code&gt;クロマキーフィルタ&lt;/code&gt;を利用することで、人物のみを切り抜くことができます。下記のような映像(今回はフリー素材で代替します)に対して&lt;code&gt;クロマキーフィルタ&lt;/code&gt;をかけると&amp;hellip;
+&lt;img src=&#34;https://youtangai.github.io/images/oreshika_16/green_heart.png&#34; alt=&#34;ハートの手&#34;&gt;&lt;/p&gt;
+&lt;p&gt;こうなります。
+&lt;img src=&#34;https://youtangai.github.io/images/oreshika_16/green_heart_filter.png&#34; alt=&#34;ハートの手クロマキー&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;おわりに&#34;&gt;おわりに&lt;/h1&gt;
+&lt;p&gt;以上が、オレシカナイトVol16における配信構成とOBSでの加工(フィルタ)の説明になります。もし、オンラインでの勉強会などを考えている方々に少しでも有益な情報を提供できていれば嬉しいです。OBSは使ってみるとそこまで難しくないと思います。&lt;/p&gt;
+&lt;p&gt;繰り返しになりますが、オレシカナイトVol16のアーカイブは&lt;a href=&#34;https://youtube.com/playlist?list=PLBsO-IAhmMUUw5_3PTQ7L0kfcnzhogpR_&#34;&gt;こちら&lt;/a&gt;にあるので、ぜひご覧ください。&lt;/p&gt;
+- https://youtangai.github.io/posts/oreshika_16/ - Copyright © 2019–2021, youtangai; all rights reserved.</description>
+        </item>
     
     
     
