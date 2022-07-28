@@ -1,74 +1,130 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
   <url>
     <loc>https://youtangai.github.io/categories/</loc>
-    <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
+    <lastmod>2022-07-20T22:16:57+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://youtangai.github.io/tags/go/</loc>
+    <lastmod>2022-07-20T22:16:57+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://youtangai.github.io/posts/</loc>
+    <lastmod>2022-07-20T22:16:57+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://youtangai.github.io/tags/</loc>
+    <lastmod>2022-07-20T22:16:57+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://youtangai.github.io/categories/tech/</loc>
+    <lastmod>2022-07-20T22:16:57+09:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://youtangai.github.io/posts/practical_go_1/</loc>
+    <lastmod>2022-07-20T22:16:57+09:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/obs/</loc>
     <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/posts/</loc>
-    <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/tags/</loc>
-    <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/categories/tech/</loc>
-    <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
-    <loc>https://youtangai.github.io/</loc>
-    <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/%E3%82%AA%E3%83%AC%E3%82%B7%E3%82%AB%E3%83%8A%E3%82%A4%E3%83%88/</loc>
     <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/posts/oreshika_16/</loc>
     <lastmod>2021-12-12T12:35:48+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/akka-stream/</loc>
     <lastmod>2021-12-07T21:19:00+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/posts/akka_stream/</loc>
     <lastmod>2021-12-07T21:19:00+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/aws/</loc>
     <lastmod>2021-05-11T22:24:44+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/eks/</loc>
     <lastmod>2021-05-11T22:24:44+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/posts/eks_1_16/</loc>
     <lastmod>2021-05-11T22:24:44+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/elasticbeanstalk/</loc>
     <lastmod>2021-04-26T00:11:12+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/posts/elastic_beanstalk/</loc>
     <lastmod>2021-04-26T00:11:12+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/categories/book/</loc>
     <lastmod>2019-12-12T18:27:00+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/posts/yuri_introduction/</loc>
     <lastmod>2019-12-12T18:27:00+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/%E7%99%BE%E5%90%88/</loc>
     <lastmod>2019-12-12T18:27:00+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/categories/about/</loc>
     <lastmod>2019-12-10T00:00:00+00:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
+    <loc>https://youtangai.github.io/</loc>
+    <lastmod>2019-12-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/%E3%81%9D%E3%81%AE%E4%BB%96/</loc>
     <lastmod>2019-12-10T00:00:00+00:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/about/</loc>
     <lastmod>2019-12-10T00:00:00+00:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/tags/communication/</loc>
     <lastmod>2018-12-13T00:27:32+09:00</lastmod>
-  </url><url>
+  </url>
+  
+  <url>
     <loc>https://youtangai.github.io/posts/communication/</loc>
     <lastmod>2018-12-13T00:27:32+09:00</lastmod>
   </url>
+  
 </urlset>

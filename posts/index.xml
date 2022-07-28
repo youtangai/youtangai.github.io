@@ -7,7 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Sun, 12 Dec 2021 12:35:48 +0900</lastBuildDate><atom:link href="https://youtangai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Jul 2022 22:16:57 +0900</lastBuildDate>
+    
+	<atom:link href="https://youtangai.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>実用Go言語読んだやつ その1</title>
+      <link>https://youtangai.github.io/posts/practical_go_1/</link>
+      <pubDate>Wed, 20 Jul 2022 22:16:57 +0900</pubDate>
+      
+      <guid>https://youtangai.github.io/posts/practical_go_1/</guid>
+      <description>1章 変数名  頭字語の場合、全部大文字か、全部小文字にする。ほかの単語と組み合わせる場合は、全部大文字にする。  ID, URL, id, url, ServeHTTP   エラーインタフェースを満たす型の名前には接尾辞Errorをつける  MarshalerError, UnsupportedTypeError   errors.New(&amp;quot;&amp;quot;)で宣言されるようなエラーの変数はerrもしくはErrから始める  ErrTooLong, ErrAdvanceTooFar   基本的に変数名は短い名前が好まれる  for文のi、requestのreq   しかし、グローバルだったりパッケージ外で呼ばれる変数は説明的であるほうがよい  パッケージ名  小文字で構成される1つの単語が好ましい  bytes, http, list   汎用的すぎるパッケージ名は避けたい  util, common, api   スネークケースやキャメルケースのパッケージ名はGoらしくないので、フォルダ分けるのがよい  encoding_json -&amp;gt; encoding/json   パッケージは常に公開されているが、internalはモジュール外から読めない テストパッケージで{name}_testはあり  定数  配列、スライス、マップ、関数の返り値は定数として定義できない  const ( a = []int{1,2,3} // ダメ  b = map[string]int{ // ダメ  &amp;#34;one&amp;#34;: 1, &amp;#34;tow&amp;#34;: 2, } c = function() // ダメ ) エラー定数  どうしても厳格にconstでErr定数を定義したい場合は以下のようにできる  type errDatabase int func (e errDatabase) Error() string { return &amp;#34;Database Error&amp;#34; } const ( ErrDatabase errDatabase = 0 )  ここまで厳格にやる必要がなければvarで気軽に定義するのもあり  databsae/sqlパッケージでは下記のように定義されている しかし簡単に乗っ取り可能    var ErrConnDone = errors.</description>
+    </item>
+    
     <item>
       <title>オレシカナイト16の配信構成</title>
       <link>https://youtangai.github.io/posts/oreshika_16/</link>

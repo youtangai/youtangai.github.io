@@ -6,9 +6,187 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Sun, 12 Dec 2021 12:35:48 +0900</lastBuildDate>
+    <lastBuildDate>Tue, 10 Dec 2019 00:00:00 +0000</lastBuildDate>
     
         <atom:link href="https://youtangai.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>実用Go言語読んだやつ その1</title>
+        <link>https://youtangai.github.io/posts/practical_go_1/</link>
+        <pubDate>Wed, 20 Jul 2022 22:16:57 +0900</pubDate>
+        
+        <guid>https://youtangai.github.io/posts/practical_go_1/</guid>
+        <description>youtangaiのブログ https://youtangai.github.io/posts/practical_go_1/ -&lt;h1 id=&#34;1章&#34;&gt;1章&lt;/h1&gt;
+&lt;h2 id=&#34;変数名&#34;&gt;変数名&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;頭字語の場合、全部大文字か、全部小文字にする。ほかの単語と組み合わせる場合は、全部大文字にする。
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ID, URL, id, url, ServeHTTP&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;エラーインタフェースを満たす型の名前には接尾辞&lt;code&gt;Error&lt;/code&gt;をつける
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MarshalerError, UnsupportedTypeError&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;errors.New(&amp;quot;&amp;quot;)で宣言されるようなエラーの変数は&lt;code&gt;err&lt;/code&gt;もしくは&lt;code&gt;Err&lt;/code&gt;から始める
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;ErrTooLong, ErrAdvanceTooFar&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;基本的に変数名は短い名前が好まれる
+&lt;ul&gt;
+&lt;li&gt;for文のi、requestのreq&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;しかし、グローバルだったりパッケージ外で呼ばれる変数は説明的であるほうがよい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;パッケージ名&#34;&gt;パッケージ名&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;小文字で構成される1つの単語が好ましい
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;bytes, http, list&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;汎用的すぎるパッケージ名は避けたい
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;util, common, api&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;スネークケースやキャメルケースのパッケージ名はGoらしくないので、フォルダ分けるのがよい
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;encoding_json -&amp;gt; encoding/json&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;パッケージは常に公開されているが、&lt;code&gt;internal&lt;/code&gt;はモジュール外から読めない&lt;/li&gt;
+&lt;li&gt;テストパッケージで&lt;code&gt;{name}_test&lt;/code&gt;はあり&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;定数&#34;&gt;定数&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;配列、スライス、マップ、関数の返り値は定数として定義できない&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; (
+    a = []&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;{&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;} &lt;span style=&#34;color:#228b22&#34;&gt;// ダメ
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    b = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;map&lt;/span&gt;[&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;]&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;{ &lt;span style=&#34;color:#228b22&#34;&gt;// ダメ
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;one&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,
+        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tow&amp;#34;&lt;/span&gt;: &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;,
+    }
+    c = &lt;span style=&#34;color:#008b45&#34;&gt;function&lt;/span&gt;() &lt;span style=&#34;color:#228b22&#34;&gt;// ダメ
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;エラー定数&#34;&gt;エラー定数&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;どうしても厳格にconstでErr定数を定義したい場合は以下のようにできる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; errDatabase &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; (e errDatabase) &lt;span style=&#34;color:#008b45&#34;&gt;Error&lt;/span&gt;() &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Database Error&amp;#34;&lt;/span&gt;
+} 
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; (
+    ErrDatabase errDatabase = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;ここまで厳格にやる必要がなければ&lt;code&gt;var&lt;/code&gt;で気軽に定義するのもあり
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;databsae/sql&lt;/code&gt;パッケージでは下記のように定義されている&lt;/li&gt;
+&lt;li&gt;しかし簡単に乗っ取り可能&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; ErrConnDone = errors.&lt;span style=&#34;color:#008b45&#34;&gt;New&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;sql: connection is already closed&amp;#34;&lt;/span&gt;)
+ErrConnDone = errors.&lt;span style=&#34;color:#008b45&#34;&gt;New&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;エラーを乗っ取ったぜ&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;関数の引数&#34;&gt;関数の引数&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;たくさん引数がある場合、構造体を利用したオプション引数という手段がある&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;type&lt;/span&gt; (
+    Option &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+        age &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+        height &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+        weight &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+        health &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;
+    }
+
+    Human &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; {
+        age &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+        height &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+        weight &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;
+        health &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;
+    }
+)
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;NewHuman&lt;/span&gt;(opt Option) *Human {
+    &lt;span style=&#34;color:#228b22&#34;&gt;// 100キロ以上は不健康
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; opt.weight &amp;lt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; {
+        opt.health = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &amp;amp;Human{
+        age: opt.age,
+        height: opt.height,
+        weight: opt.weight,
+        health: opt.health,
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;ビルダーの手法もある
+&lt;ul&gt;
+&lt;li&gt;特定のフィールドの値を設定したオプション構造体を返すレシーバ関数を用意する&lt;/li&gt;
+&lt;li&gt;メソッドチェーンでつないでいく&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;プログラムの引数&#34;&gt;プログラムの引数&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;コマンドライン引数は下記ライブラリを使われてる
+&lt;ul&gt;
+&lt;li&gt;標準パッケージ&lt;code&gt;flag&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;gopkg.in/alecthomas/kingpin.v2&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;github.com/spf13/cobra&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;クラウドネイティブなアプリケーションにおいて、環境変数の利用が強く推奨されている
+&lt;ul&gt;
+&lt;li&gt;デプロイ時に環境変数を設定可能であるため、同じバイナリで柔軟に各環境向けの挙動を設定できる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;kelseyhightower/envconfig&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;メモリパフォーマンス&#34;&gt;メモリパフォーマンス&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;スライスのメモリが足りなかった場合、2倍のサイズを確保してからそこに内容をコピーする
+&lt;ul&gt;
+&lt;li&gt;1024までは2倍ずつメモリを確保する&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;長さがわかっている場合は&lt;code&gt;make()&lt;/code&gt;でメモリを確保するべき
+&lt;ul&gt;
+&lt;li&gt;確保とコピーの頻度を減らせる&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;mapも同様に&lt;code&gt;make()&lt;/code&gt;で確保するのがよい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;文字列の結合&#34;&gt;文字列の結合&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;大量の文字列を結合する場合、&lt;code&gt;+&lt;/code&gt;を使ってループで結合するとパフォーマンスが下がる&lt;/li&gt;
+&lt;li&gt;Goにおいて文字列は不変なので、新しい文字列を生成するたびにメモリ確保が行われる&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;strings&lt;/code&gt;パッケージの&lt;code&gt;strings.Builder&lt;/code&gt;を利用するのがよい
+&lt;ul&gt;
+&lt;li&gt;結合後のサイズがわかっているのであれば&lt;code&gt;Grow&lt;/code&gt;でバッファサイズをしていするのがよい&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; builder strings.Builder
+builder.&lt;span style=&#34;color:#008b45&#34;&gt;Grow&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;100&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;// 100文字以下と仮定
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; i, word := &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;range&lt;/span&gt; src {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; i != &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; {
+        builder.&lt;span style=&#34;color:#008b45&#34;&gt;WriteByte&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;// byte配列として追加
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+    builder.&lt;span style=&#34;color:#008b45&#34;&gt;WriteString&lt;/span&gt;(word) &lt;span style=&#34;color:#228b22&#34;&gt;// byte配列として追加
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+log.&lt;span style=&#34;color:#008b45&#34;&gt;Println&lt;/span&gt;(builder.&lt;span style=&#34;color:#008b45&#34;&gt;String&lt;/span&gt;()) &lt;span style=&#34;color:#228b22&#34;&gt;// String()メソッドでstringにキャスト
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://youtangai.github.io/posts/practical_go_1/ - Copyright © 2019–2021, youtangai; all rights reserved.</description>
+        </item>
     
     
     
@@ -95,7 +273,7 @@ Akka Streamsとは、&lt;a href=&#34;https://www.reactive-streams.org/&#34;&gt;R
 そのため、Akka Streamsを理解するためにはReactive Streamsを理解する必要があります。&lt;/p&gt;
 &lt;h2 id=&#34;reactive-streams&#34;&gt;Reactive Streams&lt;/h2&gt;
 &lt;p&gt;Reactive Streamsのドキュメントではこのように記述されています。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure
+&lt;pre&gt;&lt;code&gt;Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;直訳すると、Reactive Streamsとは&lt;code&gt;ノンブロッキング&lt;/code&gt;な&lt;code&gt;バックプレッシャー&lt;/code&gt;を備えた&lt;code&gt;非同期ストリーム処理の標準&lt;/code&gt;です。
 ノンブロッキングや非同期ストリーム処理はなんとなく想像がつくのですが、バックプレッシャーという単語は初耳でした。&lt;/p&gt;
 &lt;h2 id=&#34;バックプレッシャー&#34;&gt;バックプレッシャー&lt;/h2&gt;
@@ -122,8 +300,8 @@ Akka Streamsには&lt;code&gt;Source&lt;/code&gt;、&lt;code&gt;Sink&lt;/code&gt
 &lt;h1 id=&#34;参考文献&#34;&gt;参考文献&lt;/h1&gt;
 &lt;ul&gt;
 &lt;li&gt;&amp;ldquo;Reactive Streams&amp;rdquo;. &lt;a href=&#34;https://www.reactive-streams.org/&#34;&gt;https://www.reactive-streams.org/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Xiao Yang. &amp;ldquo;Akka Streamsについての基礎概念&amp;rdquo;. Qiita. 2018/02/01. &lt;a href=&#34;https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a&#34;&gt;https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a&lt;/a&gt;, (Accessed: 2021/12/07)&lt;/li&gt;
-&lt;li&gt;前出祐吾. &amp;ldquo;Akka Streamsで実装するリアクティブストリーム&amp;rdquo;._ Think IT. 2018/03/07. &lt;a href=&#34;https://thinkit.co.jp/article/13485&#34;&gt;https://thinkit.co.jp/article/13485&lt;/a&gt;, (Accessed: 2021/12/07)&lt;/li&gt;
+&lt;li&gt;Xiao Yang. &amp;ldquo;Akka Streamsについての基礎概念&amp;rdquo;. Qiita. 2018/02/01. &lt;a href=&#34;https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a,&#34;&gt;https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a,&lt;/a&gt; (Accessed: 2021/12/07)&lt;/li&gt;
+&lt;li&gt;前出祐吾. &amp;ldquo;Akka Streamsで実装するリアクティブストリーム&amp;rdquo;._ Think IT. 2018/03/07. &lt;a href=&#34;https://thinkit.co.jp/article/13485,&#34;&gt;https://thinkit.co.jp/article/13485,&lt;/a&gt; (Accessed: 2021/12/07)&lt;/li&gt;
 &lt;/ul&gt;
 - https://youtangai.github.io/posts/akka_stream/ - Copyright © 2019–2021, youtangai; all rights reserved.</description>
         </item>
@@ -214,7 +392,7 @@ Akka Streamsには&lt;code&gt;Source&lt;/code&gt;、&lt;code&gt;Sink&lt;/code&gt
 &lt;/ol&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;autoDiscovery:
+&lt;pre&gt;&lt;code&gt;autoDiscovery:
     clusterName: {クラスタの名前}
     tags:
         - k8s.io/cluster-autoscaler/enabled

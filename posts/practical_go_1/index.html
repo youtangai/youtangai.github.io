@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html><head>
+<title>実用Go言語読んだやつ その1</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="実用Go言語読んだやつ その1" />
+<meta property="og:description" content="1章 変数名  頭字語の場合、全部大文字か、全部小文字にする。ほかの単語と組み合わせる場合は、全部大文字にする。  ID, URL, id, url, ServeHTTP   エラーインタフェースを満たす型の名前には接尾辞Errorをつける  MarshalerError, UnsupportedTypeError   errors.New(&quot;&quot;)で宣言されるようなエラーの変数はerrもしくはErrから始める  ErrTooLong, ErrAdvanceTooFar   基本的に変数名は短い名前が好まれる  for文のi、requestのreq   しかし、グローバルだったりパッケージ外で呼ばれる変数は説明的であるほうがよい  パッケージ名  小文字で構成される1つの単語が好ましい  bytes, http, list   汎用的すぎるパッケージ名は避けたい  util, common, api   スネークケースやキャメルケースのパッケージ名はGoらしくないので、フォルダ分けるのがよい  encoding_json -&gt; encoding/json   パッケージは常に公開されているが、internalはモジュール外から読めない テストパッケージで{name}_testはあり  定数  配列、スライス、マップ、関数の返り値は定数として定義できない  const ( a = []int{1,2,3} // ダメ  b = map[string]int{ // ダメ  &#34;one&#34;: 1, &#34;tow&#34;: 2, } c = function() // ダメ ) エラー定数  どうしても厳格にconstでErr定数を定義したい場合は以下のようにできる  type errDatabase int func (e errDatabase) Error() string { return &#34;Database Error&#34; } const ( ErrDatabase errDatabase = 0 )  ここまで厳格にやる必要がなければvarで気軽に定義するのもあり  databsae/sqlパッケージでは下記のように定義されている しかし簡単に乗っ取り可能    var ErrConnDone = errors." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://youtangai.github.io/posts/practical_go_1/" />
+<meta property="article:published_time" content="2022-07-20T22:16:57+09:00" />
+<meta property="article:modified_time" content="2022-07-20T22:16:57+09:00" /><meta property="og:site_name" content="youtangaiのブログ" />
+
+
+
+
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="実用Go言語読んだやつ その1"/>
+<meta name="twitter:description" content="1章 変数名  頭字語の場合、全部大文字か、全部小文字にする。ほかの単語と組み合わせる場合は、全部大文字にする。  ID, URL, id, url, ServeHTTP   エラーインタフェースを満たす型の名前には接尾辞Errorをつける  MarshalerError, UnsupportedTypeError   errors.New(&quot;&quot;)で宣言されるようなエラーの変数はerrもしくはErrから始める  ErrTooLong, ErrAdvanceTooFar   基本的に変数名は短い名前が好まれる  for文のi、requestのreq   しかし、グローバルだったりパッケージ外で呼ばれる変数は説明的であるほうがよい  パッケージ名  小文字で構成される1つの単語が好ましい  bytes, http, list   汎用的すぎるパッケージ名は避けたい  util, common, api   スネークケースやキャメルケースのパッケージ名はGoらしくないので、フォルダ分けるのがよい  encoding_json -&gt; encoding/json   パッケージは常に公開されているが、internalはモジュール外から読めない テストパッケージで{name}_testはあり  定数  配列、スライス、マップ、関数の返り値は定数として定義できない  const ( a = []int{1,2,3} // ダメ  b = map[string]int{ // ダメ  &#34;one&#34;: 1, &#34;tow&#34;: 2, } c = function() // ダメ ) エラー定数  どうしても厳格にconstでErr定数を定義したい場合は以下のようにできる  type errDatabase int func (e errDatabase) Error() string { return &#34;Database Error&#34; } const ( ErrDatabase errDatabase = 0 )  ここまで厳格にやる必要がなければvarで気軽に定義するのもあり  databsae/sqlパッケージでは下記のように定義されている しかし簡単に乗っ取り可能    var ErrConnDone = errors."/>
+
+
+
+
+
+
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-154413959-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="https://raw.githubusercontent.com/youtangai/blog/master/favicon.png">
+
+
+
+<link rel="stylesheet" href="https://youtangai.github.io/scss/journal.min.9dcd73730f8f58bad6b95e7efb7aeed20370d1292b28735082f1c34ac4738ee5.css" integrity="sha256-nc1zcw&#43;PWLrWuV5&#43;&#43;3ru0gNw0SkrKHNQgvHDSsRzjuU=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://youtangai.github.io/scss/dark-mode.min.5b0c6a6662a54d70afb36622a7dc77a0aaabfb5c9d1d9d6c7ee5128faf5e278f.css" integrity="sha256-WwxqZmKlTXCvs2Yip9x3oKqr&#43;1ydHZ1sfuUSj69eJ48=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=M+PLUS+1p+Fira+Mono|Material+Icons");
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://youtangai.github.io/">
+    
+        <div class="nav-title">
+            youtangaiのブログ
+        </div>
+        
+        <div class="nav-subtitle">
+            百合ときどき技術
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                About
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Blog
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright © 2019–2021, youtangai; all rights reserved.
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1%e7%ab%a0" onclick="onNavClick(`#1章-nav`)" id="1章-nav">
+									1章
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%a4%89%e6%95%b0%e5%90%8d" onclick="onNavClick(`#変数名-nav`)" id="変数名-nav">
+									変数名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e5%90%8d" onclick="onNavClick(`#パッケージ名-nav`)" id="パッケージ名-nav">
+									パッケージ名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e6%95%b0" onclick="onNavClick(`#定数-nav`)" id="定数-nav">
+									定数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%82%a8%e3%83%a9%e3%83%bc%e5%ae%9a%e6%95%b0" onclick="onNavClick(`#エラー定数-nav`)" id="エラー定数-nav">
+									エラー定数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%96%a2%e6%95%b0%e3%81%ae%e5%bc%95%e6%95%b0" onclick="onNavClick(`#関数の引数-nav`)" id="関数の引数-nav">
+									関数の引数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%81%ae%e5%bc%95%e6%95%b0" onclick="onNavClick(`#プログラムの引数-nav`)" id="プログラムの引数-nav">
+									プログラムの引数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%83%a1%e3%83%a2%e3%83%aa%e3%83%91%e3%83%95%e3%82%a9%e3%83%bc%e3%83%9e%e3%83%b3%e3%82%b9" onclick="onNavClick(`#メモリパフォーマンス-nav`)" id="メモリパフォーマンス-nav">
+									メモリパフォーマンス
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e5%ad%97%e5%88%97%e3%81%ae%e7%b5%90%e5%90%88" onclick="onNavClick(`#文字列の結合-nav`)" id="文字列の結合-nav">
+									文字列の結合
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    About
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Blog
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- CATALOG -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#1%e7%ab%a0" onclick="onNavClick(`#1章-nav`)" id="1章-nav">
+									1章
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%a4%89%e6%95%b0%e5%90%8d" onclick="onNavClick(`#変数名-nav`)" id="変数名-nav">
+									変数名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%83%91%e3%83%83%e3%82%b1%e3%83%bc%e3%82%b8%e5%90%8d" onclick="onNavClick(`#パッケージ名-nav`)" id="パッケージ名-nav">
+									パッケージ名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9a%e6%95%b0" onclick="onNavClick(`#定数-nav`)" id="定数-nav">
+									定数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%82%a8%e3%83%a9%e3%83%bc%e5%ae%9a%e6%95%b0" onclick="onNavClick(`#エラー定数-nav`)" id="エラー定数-nav">
+									エラー定数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%96%a2%e6%95%b0%e3%81%ae%e5%bc%95%e6%95%b0" onclick="onNavClick(`#関数の引数-nav`)" id="関数の引数-nav">
+									関数の引数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%a0%e3%81%ae%e5%bc%95%e6%95%b0" onclick="onNavClick(`#プログラムの引数-nav`)" id="プログラムの引数-nav">
+									プログラムの引数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e3%83%a1%e3%83%a2%e3%83%aa%e3%83%91%e3%83%95%e3%82%a9%e3%83%bc%e3%83%9e%e3%83%b3%e3%82%b9" onclick="onNavClick(`#メモリパフォーマンス-nav`)" id="メモリパフォーマンス-nav">
+									メモリパフォーマンス
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e5%ad%97%e5%88%97%e3%81%ae%e7%b5%90%e5%90%88" onclick="onNavClick(`#文字列の結合-nav`)" id="文字列の結合-nav">
+									文字列の結合
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://youtangai.github.io/">
+            youtangaiのブログ
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://youtangai.github.io/">
+        <div class="single-column-header-title">youtangaiのブログ</div>
+        
+        <div class="single-column-header-subtitle">百合ときどき技術</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    実用Go言語読んだやつ その1
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-07-20 22:16
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/tech">Tech</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/go">Go</a>
+                                &nbsp;
+                            
+                        
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="1章">1章</h1>
+<h2 id="変数名">変数名</h2>
+<ul>
+<li>頭字語の場合、全部大文字か、全部小文字にする。ほかの単語と組み合わせる場合は、全部大文字にする。
+<ul>
+<li><code>ID, URL, id, url, ServeHTTP</code></li>
+</ul>
+</li>
+<li>エラーインタフェースを満たす型の名前には接尾辞<code>Error</code>をつける
+<ul>
+<li><code>MarshalerError, UnsupportedTypeError</code></li>
+</ul>
+</li>
+<li>errors.New(&quot;&quot;)で宣言されるようなエラーの変数は<code>err</code>もしくは<code>Err</code>から始める
+<ul>
+<li><code>ErrTooLong, ErrAdvanceTooFar</code></li>
+</ul>
+</li>
+<li>基本的に変数名は短い名前が好まれる
+<ul>
+<li>for文のi、requestのreq</li>
+</ul>
+</li>
+<li>しかし、グローバルだったりパッケージ外で呼ばれる変数は説明的であるほうがよい</li>
+</ul>
+<h2 id="パッケージ名">パッケージ名</h2>
+<ul>
+<li>小文字で構成される1つの単語が好ましい
+<ul>
+<li><code>bytes, http, list</code></li>
+</ul>
+</li>
+<li>汎用的すぎるパッケージ名は避けたい
+<ul>
+<li><code>util, common, api</code></li>
+</ul>
+</li>
+<li>スネークケースやキャメルケースのパッケージ名はGoらしくないので、フォルダ分けるのがよい
+<ul>
+<li><code>encoding_json -&gt; encoding/json</code></li>
+</ul>
+</li>
+<li>パッケージは常に公開されているが、<code>internal</code>はモジュール外から読めない</li>
+<li>テストパッケージで<code>{name}_test</code>はあり</li>
+</ul>
+<h2 id="定数">定数</h2>
+<ul>
+<li>配列、スライス、マップ、関数の返り値は定数として定義できない</li>
+</ul>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">const</span> (
+    a = []<span style="color:#00688b;font-weight:bold">int</span>{<span style="color:#b452cd">1</span>,<span style="color:#b452cd">2</span>,<span style="color:#b452cd">3</span>} <span style="color:#228b22">// ダメ
+</span><span style="color:#228b22"></span>    b = <span style="color:#8b008b;font-weight:bold">map</span>[<span style="color:#00688b;font-weight:bold">string</span>]<span style="color:#00688b;font-weight:bold">int</span>{ <span style="color:#228b22">// ダメ
+</span><span style="color:#228b22"></span>        <span style="color:#cd5555">&#34;one&#34;</span>: <span style="color:#b452cd">1</span>,
+        <span style="color:#cd5555">&#34;tow&#34;</span>: <span style="color:#b452cd">2</span>,
+    }
+    c = <span style="color:#008b45">function</span>() <span style="color:#228b22">// ダメ
+</span><span style="color:#228b22"></span>)
+</code></pre></div><h2 id="エラー定数">エラー定数</h2>
+<ul>
+<li>どうしても厳格にconstでErr定数を定義したい場合は以下のようにできる</li>
+</ul>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">type</span> errDatabase <span style="color:#00688b;font-weight:bold">int</span>
+<span style="color:#8b008b;font-weight:bold">func</span> (e errDatabase) <span style="color:#008b45">Error</span>() <span style="color:#00688b;font-weight:bold">string</span> {
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#cd5555">&#34;Database Error&#34;</span>
+} 
+<span style="color:#8b008b;font-weight:bold">const</span> (
+    ErrDatabase errDatabase = <span style="color:#b452cd">0</span>
+)
+</code></pre></div><ul>
+<li>ここまで厳格にやる必要がなければ<code>var</code>で気軽に定義するのもあり
+<ul>
+<li><code>databsae/sql</code>パッケージでは下記のように定義されている</li>
+<li>しかし簡単に乗っ取り可能</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">var</span> ErrConnDone = errors.<span style="color:#008b45">New</span>(<span style="color:#cd5555">&#34;sql: connection is already closed&#34;</span>)
+ErrConnDone = errors.<span style="color:#008b45">New</span>(<span style="color:#cd5555">&#34;エラーを乗っ取ったぜ&#34;</span>)
+</code></pre></div><h2 id="関数の引数">関数の引数</h2>
+<ul>
+<li>たくさん引数がある場合、構造体を利用したオプション引数という手段がある</li>
+</ul>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">type</span> (
+    Option <span style="color:#8b008b;font-weight:bold">struct</span> {
+        age <span style="color:#00688b;font-weight:bold">int</span>
+        height <span style="color:#00688b;font-weight:bold">int</span>
+        weight <span style="color:#00688b;font-weight:bold">int</span>
+        health <span style="color:#00688b;font-weight:bold">bool</span>
+    }
+
+    Human <span style="color:#8b008b;font-weight:bold">struct</span> {
+        age <span style="color:#00688b;font-weight:bold">int</span>
+        height <span style="color:#00688b;font-weight:bold">int</span>
+        weight <span style="color:#00688b;font-weight:bold">int</span>
+        health <span style="color:#00688b;font-weight:bold">bool</span>
+    }
+)
+
+<span style="color:#8b008b;font-weight:bold">func</span> <span style="color:#008b45">NewHuman</span>(opt Option) *Human {
+    <span style="color:#228b22">// 100キロ以上は不健康
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">if</span> opt.weight &lt; <span style="color:#b452cd">0</span> {
+        opt.health = <span style="color:#8b008b;font-weight:bold">false</span>
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> &amp;Human{
+        age: opt.age,
+        height: opt.height,
+        weight: opt.weight,
+        health: opt.health,
+    }
+}
+</code></pre></div><ul>
+<li>ビルダーの手法もある
+<ul>
+<li>特定のフィールドの値を設定したオプション構造体を返すレシーバ関数を用意する</li>
+<li>メソッドチェーンでつないでいく</li>
+</ul>
+</li>
+</ul>
+<h2 id="プログラムの引数">プログラムの引数</h2>
+<ul>
+<li>コマンドライン引数は下記ライブラリを使われてる
+<ul>
+<li>標準パッケージ<code>flag</code></li>
+<li><code>gopkg.in/alecthomas/kingpin.v2</code></li>
+<li><code>github.com/spf13/cobra</code></li>
+</ul>
+</li>
+<li>クラウドネイティブなアプリケーションにおいて、環境変数の利用が強く推奨されている
+<ul>
+<li>デプロイ時に環境変数を設定可能であるため、同じバイナリで柔軟に各環境向けの挙動を設定できる</li>
+<li><code>kelseyhightower/envconfig</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="メモリパフォーマンス">メモリパフォーマンス</h2>
+<ul>
+<li>スライスのメモリが足りなかった場合、2倍のサイズを確保してからそこに内容をコピーする
+<ul>
+<li>1024までは2倍ずつメモリを確保する</li>
+</ul>
+</li>
+<li>長さがわかっている場合は<code>make()</code>でメモリを確保するべき
+<ul>
+<li>確保とコピーの頻度を減らせる</li>
+</ul>
+</li>
+<li>mapも同様に<code>make()</code>で確保するのがよい</li>
+</ul>
+<h2 id="文字列の結合">文字列の結合</h2>
+<ul>
+<li>大量の文字列を結合する場合、<code>+</code>を使ってループで結合するとパフォーマンスが下がる</li>
+<li>Goにおいて文字列は不変なので、新しい文字列を生成するたびにメモリ確保が行われる</li>
+<li><code>strings</code>パッケージの<code>strings.Builder</code>を利用するのがよい
+<ul>
+<li>結合後のサイズがわかっているのであれば<code>Grow</code>でバッファサイズをしていするのがよい</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-go" data-lang="go"><span style="color:#8b008b;font-weight:bold">var</span> builder strings.Builder
+builder.<span style="color:#008b45">Grow</span>(<span style="color:#b452cd">100</span>) <span style="color:#228b22">// 100文字以下と仮定
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">for</span> i, word := <span style="color:#8b008b;font-weight:bold">range</span> src {
+    <span style="color:#8b008b;font-weight:bold">if</span> i != <span style="color:#b452cd">0</span> {
+        builder.<span style="color:#008b45">WriteByte</span>(<span style="color:#cd5555">&#39; &#39;</span>) <span style="color:#228b22">// byte配列として追加
+</span><span style="color:#228b22"></span>    }
+    builder.<span style="color:#008b45">WriteString</span>(word) <span style="color:#228b22">// byte配列として追加
+</span><span style="color:#228b22"></span>}
+log.<span style="color:#008b45">Println</span>(builder.<span style="color:#008b45">String</span>()) <span style="color:#228b22">// String()メソッドでstringにキャスト
+</span></code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">Last modified on 2022-07-20</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			Next<br>No newer posts.
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://youtangai.github.io/posts/oreshika_16/">
+			Previous<br>オレシカナイト16の配信構成
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://amazingrise.net">Rise</a>
+<br>
+Ported from <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	Copyright © 2019–2021, youtangai; all rights reserved.
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

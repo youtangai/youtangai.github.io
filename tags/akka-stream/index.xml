@@ -7,7 +7,11 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>Copyright © 2019–2021, youtangai; all rights reserved.</copyright>
-    <lastBuildDate>Tue, 07 Dec 2021 21:19:00 +0900</lastBuildDate><atom:link href="https://youtangai.github.io/tags/akka-stream/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 07 Dec 2021 21:19:00 +0900</lastBuildDate>
+    
+	<atom:link href="https://youtangai.github.io/tags/akka-stream/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>Akka Streamsについて調べてみたよ</title>
       <link>https://youtangai.github.io/posts/akka_stream/</link>

@@ -19,10 +19,10 @@
 <meta property="og:title" content="Akka Streamsについて調べてみたよ" />
 <meta property="og:description" content="チームでブラックボックスになっているシステムで利用されているAkka Streamsについて調べました。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://youtangai.github.io/posts/akka_stream/" /><meta property="og:image" content="https://youtangai.github.io/images/akka_stream.png" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://youtangai.github.io/posts/akka_stream/" />
+<meta property="og:image" content="https://youtangai.github.io/images/akka_stream.png" />
 <meta property="article:published_time" content="2021-12-07T21:19:00+09:00" />
 <meta property="article:modified_time" content="2021-12-07T21:19:00+09:00" /><meta property="og:site_name" content="youtangaiのブログ" />
-
 
 
 
@@ -54,6 +54,7 @@ if (!doNotTrack) {
 </script>
 
 
+
 <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
 
 
@@ -66,11 +67,11 @@ if (!doNotTrack) {
 
 
 
-<link rel="stylesheet" href="https://youtangai.github.io/scss/journal.min.885749754217eccc1c08bb2db3b9e3b434d1b6e923dbe55aa39ff71f1ccbbe49.css" integrity="sha256-iFdJdUIX7MwcCLsts7njtDTRtukj2&#43;Vao5/3HxzLvkk=" media="screen">
+<link rel="stylesheet" href="https://youtangai.github.io/scss/journal.min.9dcd73730f8f58bad6b95e7efb7aeed20370d1292b28735082f1c34ac4738ee5.css" integrity="sha256-nc1zcw&#43;PWLrWuV5&#43;&#43;3ru0gNw0SkrKHNQgvHDSsRzjuU=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://youtangai.github.io/scss/dark-mode.min.acc10099601364fc0d767709244c108e8894cf8fa82303513bbfd180308a66e0.css" integrity="sha256-rMEAmWATZPwNdncJJEwQjoiUz4&#43;oIwNRO7/RgDCKZuA=" media="screen">
+<link rel="stylesheet" href="https://youtangai.github.io/scss/dark-mode.min.5b0c6a6662a54d70afb36622a7dc77a0aaabfb5c9d1d9d6c7ee5128faf5e278f.css" integrity="sha256-WwxqZmKlTXCvs2Yip9x3oKqr&#43;1ydHZ1sfuUSj69eJ48=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -864,7 +865,7 @@ Akka Streamsとは、<a href="https://www.reactive-streams.org/">Reactive Stream
 そのため、Akka Streamsを理解するためにはReactive Streamsを理解する必要があります。</p>
 <h2 id="reactive-streams">Reactive Streams</h2>
 <p>Reactive Streamsのドキュメントではこのように記述されています。</p>
-<pre tabindex="0"><code>Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure
+<pre><code>Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure
 </code></pre><p>直訳すると、Reactive Streamsとは<code>ノンブロッキング</code>な<code>バックプレッシャー</code>を備えた<code>非同期ストリーム処理の標準</code>です。
 ノンブロッキングや非同期ストリーム処理はなんとなく想像がつくのですが、バックプレッシャーという単語は初耳でした。</p>
 <h2 id="バックプレッシャー">バックプレッシャー</h2>
@@ -891,8 +892,8 @@ Akka Streamsには<code>Source</code>、<code>Sink</code>、<code>Flow</code>、
 <h1 id="参考文献">参考文献</h1>
 <ul>
 <li>&ldquo;Reactive Streams&rdquo;. <a href="https://www.reactive-streams.org/">https://www.reactive-streams.org/</a></li>
-<li>Xiao Yang. &ldquo;Akka Streamsについての基礎概念&rdquo;. Qiita. 2018/02/01. <a href="https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a">https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a</a>, (Accessed: 2021/12/07)</li>
-<li>前出祐吾. &ldquo;Akka Streamsで実装するリアクティブストリーム&rdquo;._ Think IT. 2018/03/07. <a href="https://thinkit.co.jp/article/13485">https://thinkit.co.jp/article/13485</a>, (Accessed: 2021/12/07)</li>
+<li>Xiao Yang. &ldquo;Akka Streamsについての基礎概念&rdquo;. Qiita. 2018/02/01. <a href="https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a,">https://qiita.com/xoyo24/items/299ee3e624f4afe2d27a,</a> (Accessed: 2021/12/07)</li>
+<li>前出祐吾. &ldquo;Akka Streamsで実装するリアクティブストリーム&rdquo;._ Think IT. 2018/03/07. <a href="https://thinkit.co.jp/article/13485,">https://thinkit.co.jp/article/13485,</a> (Accessed: 2021/12/07)</li>
 </ul>
 
                     
